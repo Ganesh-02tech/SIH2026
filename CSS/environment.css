@@ -1,0 +1,1814 @@
+/* =========================================================
+   DHRUV NETRA — ENVIRONMENT CSS
+   Minimalistic Environmental Monitoring Interface
+   ========================================================= */
+
+
+/* =========================================================
+   ROOT VARIABLES
+   ========================================================= */
+
+:root {
+    --bg-main: #07111f;
+    --bg-sidebar: #091827;
+
+    --bg-card: #0d1c2e;
+    --bg-card-hover: #11243a;
+
+    --border: rgba(148, 177, 205, 0.12);
+    --border-light: rgba(148, 177, 205, 0.08);
+
+    --text-primary: #f2f7fb;
+    --text-secondary: #9fb0c1;
+    --text-muted: #6f8193;
+
+    /* Environment colors */
+    --weather: #4db8ff;
+    --weather-soft: rgba(77, 184, 255, 0.11);
+
+    --ice: #67dff5;
+    --ice-soft: rgba(103, 223, 245, 0.10);
+
+    --ocean: #4c9fff;
+    --ocean-soft: rgba(76, 159, 255, 0.10);
+
+    /* Status colors */
+    --green: #35d39a;
+    --green-soft: rgba(53, 211, 154, 0.10);
+
+    --orange: #ffb454;
+    --orange-soft: rgba(255, 180, 84, 0.10);
+
+    --red: #ff6575;
+    --red-soft: rgba(255, 101, 117, 0.10);
+
+    /* AI */
+    --ai: #a985ff;
+    --ai-cyan: #5ddcf0;
+    --ai-soft: rgba(169, 133, 255, 0.08);
+    --ai-border: rgba(169, 133, 255, 0.17);
+
+    --sidebar-width: 245px;
+
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+
+    --transition: 0.25s ease;
+}
+
+
+/* =========================================================
+   RESET
+   ========================================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: "Inter", sans-serif;
+
+    background: var(--bg-main);
+
+    color: var(--text-primary);
+
+    min-height: 100vh;
+
+    overflow-x: hidden;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+
+/* =========================================================
+   APP CONTAINER
+   ========================================================= */
+
+.app-container {
+    display: flex;
+
+    min-height: 100vh;
+}
+
+
+/* =========================================================
+   SIDEBAR
+   ========================================================= */
+
+.sidebar {
+    width: var(--sidebar-width);
+
+    height: 100vh;
+
+    position: fixed;
+
+    top: 0;
+    left: 0;
+
+    background: var(--bg-sidebar);
+
+    border-right: 1px solid var(--border);
+
+    display: flex;
+    flex-direction: column;
+
+    padding: 24px 15px;
+
+    z-index: 100;
+}
+
+
+/* =========================================================
+   BRAND
+   ========================================================= */
+
+.brand {
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 4px 9px 28px;
+}
+
+.brand-icon {
+    width: 38px;
+    height: 38px;
+
+    border-radius: 10px;
+
+    background: linear-gradient(
+        135deg,
+        #1977c9,
+        #45b7ff
+    );
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    color: white;
+}
+
+.brand-icon svg {
+    width: 19px;
+    height: 19px;
+}
+
+.brand-text h2 {
+    font-size: 15px;
+
+    font-weight: 700;
+
+    letter-spacing: -0.2px;
+}
+
+.brand-text span {
+    display: block;
+
+    margin-top: 3px;
+
+    color: var(--text-muted);
+
+    font-size: 8.5px;
+
+    line-height: 1.3;
+
+    max-width: 145px;
+}
+
+
+/* =========================================================
+   SIDEBAR NAV
+   ========================================================= */
+
+.sidebar-nav {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 5px;
+}
+
+.nav-item {
+    min-height: 42px;
+
+    padding: 0 12px;
+
+    border-radius: 9px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    color: var(--text-secondary);
+
+    font-size: 12px;
+
+    font-weight: 500;
+
+    transition:
+        background var(--transition),
+        color var(--transition);
+}
+
+.nav-item svg {
+    width: 16px;
+    height: 16px;
+
+    stroke-width: 1.8;
+}
+
+.nav-item:hover {
+    background: rgba(255, 255, 255, 0.04);
+
+    color: var(--text-primary);
+}
+
+.nav-item.active {
+    background: rgba(59, 158, 241, 0.13);
+
+    color: #5bb4ff;
+}
+
+.nav-alert-count {
+    margin-left: auto;
+
+    min-width: 17px;
+    height: 17px;
+
+    padding: 0 5px;
+
+    border-radius: 20px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: var(--red-soft);
+
+    color: var(--red);
+
+    font-size: 7px;
+
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   SIDEBAR BOTTOM
+   ========================================================= */
+
+.sidebar-bottom {
+    margin-top: auto;
+}
+
+.system-status {
+    margin-top: 18px;
+
+    padding: 12px;
+
+    border: 1px solid var(--border-light);
+
+    border-radius: 10px;
+
+    background: rgba(255, 255, 255, 0.018);
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+}
+
+.system-status strong {
+    display: block;
+
+    font-size: 10px;
+
+    font-weight: 600;
+}
+
+.system-status small {
+    display: block;
+
+    margin-top: 3px;
+
+    color: var(--text-muted);
+
+    font-size: 8px;
+}
+
+
+/* =========================================================
+   STATUS DOT
+   ========================================================= */
+
+.status-dot {
+    width: 7px;
+    height: 7px;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background: var(--green);
+
+    box-shadow:
+        0 0 0 4px rgba(53, 211, 154, 0.08);
+
+    animation: statusPulse 3s ease-in-out infinite;
+}
+
+@keyframes statusPulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.55;
+    }
+}
+
+
+/* =========================================================
+   MAIN CONTENT
+   ========================================================= */
+
+.main-content {
+    margin-left: var(--sidebar-width);
+
+    width: calc(100% - var(--sidebar-width));
+
+    min-height: 100vh;
+
+    padding: 28px 32px 22px;
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.top-header {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: flex-start;
+
+    gap: 25px;
+
+    margin-bottom: 27px;
+}
+
+.page-label,
+.panel-label {
+    color: #6c8297;
+
+    font-size: 8px;
+
+    font-weight: 600;
+
+    letter-spacing: 1.5px;
+}
+
+.top-header h1 {
+    margin-top: 5px;
+
+    font-size: 27px;
+
+    font-weight: 700;
+
+    letter-spacing: -0.8px;
+}
+
+.page-description {
+    margin-top: 7px;
+
+    color: var(--text-secondary);
+
+    font-size: 11px;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   HEADER RIGHT
+   ========================================================= */
+
+.header-right {
+    display: flex;
+
+    align-items: center;
+
+    gap: 20px;
+}
+
+.connection-status {
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    color: var(--text-secondary);
+
+    font-size: 10px;
+}
+
+.last-update {
+    color: var(--text-muted);
+
+    font-size: 9px;
+
+    line-height: 1.4;
+}
+
+.last-update strong {
+    display: block;
+
+    margin-top: 2px;
+
+    color: var(--text-secondary);
+
+    font-size: 9px;
+
+    font-weight: 500;
+}
+
+.user-profile {
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    padding-left: 17px;
+
+    border-left: 1px solid var(--border);
+}
+
+.profile-avatar {
+    width: 32px;
+    height: 32px;
+
+    border-radius: 50%;
+
+    background: #1a3045;
+
+    border: 1px solid rgba(91, 180, 255, 0.2);
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    color: #6dbbfa;
+
+    font-size: 9px;
+
+    font-weight: 700;
+}
+
+.profile-info strong {
+    display: block;
+
+    font-size: 9px;
+
+    font-weight: 600;
+}
+
+.profile-info span {
+    display: block;
+
+    margin-top: 2px;
+
+    color: var(--text-muted);
+
+    font-size: 8px;
+}
+
+
+/* =========================================================
+   OVERALL ENVIRONMENT STATUS
+   ========================================================= */
+
+.environment-overview {
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1fr)
+        minmax(360px, 0.95fr);
+
+    gap: 14px;
+
+    margin-bottom: 15px;
+
+    padding: 18px;
+
+    background: var(--bg-card);
+
+    border: 1px solid var(--border);
+
+    border-radius: var(--radius-md);
+}
+
+.overview-main {
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+}
+
+.overview-heading {
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+}
+
+.overview-icon {
+    width: 42px;
+    height: 42px;
+
+    border-radius: 11px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+}
+
+.overview-icon svg {
+    width: 20px;
+    height: 20px;
+}
+
+.overview-icon.safe {
+    background: var(--green-soft);
+
+    color: var(--green);
+}
+
+.overview-icon.warning {
+    background: var(--orange-soft);
+
+    color: var(--orange);
+}
+
+.overview-icon.danger {
+    background: var(--red-soft);
+
+    color: var(--red);
+}
+
+.overview-heading h2 {
+    margin-top: 4px;
+
+    font-size: 18px;
+
+    font-weight: 600;
+}
+
+.overview-description {
+    margin-top: 12px;
+
+    max-width: 600px;
+
+    color: var(--text-secondary);
+
+    font-size: 9px;
+
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   AI OVERVIEW
+   ========================================================= */
+
+.ai-overview {
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 11px;
+
+    padding: 14px;
+
+    border-radius: 10px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(169, 133, 255, 0.08),
+            rgba(93, 220, 240, 0.035)
+        );
+
+    border: 1px solid var(--ai-border);
+}
+
+.ai-icon {
+    width: 30px;
+    height: 30px;
+
+    flex-shrink: 0;
+
+    border-radius: 8px;
+
+    background: rgba(169, 133, 255, 0.13);
+
+    color: var(--ai);
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+}
+
+.ai-icon svg {
+    width: 15px;
+    height: 15px;
+}
+
+.ai-title-row {
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+}
+
+.ai-title-row strong {
+    color: #c9b8ff;
+
+    font-size: 9px;
+
+    font-weight: 600;
+}
+
+.ai-badge {
+    padding: 3px 5px;
+
+    border-radius: 4px;
+
+    background: rgba(169, 133, 255, 0.13);
+
+    color: var(--ai);
+
+    font-size: 6px;
+
+    font-weight: 700;
+
+    letter-spacing: 0.5px;
+}
+
+.ai-content p {
+    margin-top: 5px;
+
+    color: #aeb4c5;
+
+    font-size: 8px;
+
+    line-height: 1.55;
+}
+
+
+/* =========================================================
+   ENVIRONMENT SECTION
+   ========================================================= */
+
+.environment-section {
+    margin-bottom: 15px;
+
+    padding: 18px;
+
+    background: var(--bg-card);
+
+    border: 1px solid var(--border);
+
+    border-radius: var(--radius-md);
+}
+
+
+/* =========================================================
+   SECTION HEADING
+   ========================================================= */
+
+.section-heading {
+    display: flex;
+
+    align-items: flex-start;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-bottom: 17px;
+}
+
+.section-heading h2 {
+    margin-top: 4px;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    letter-spacing: -0.2px;
+}
+
+.data-status {
+    display: flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    color: var(--green);
+
+    font-size: 7px;
+
+    font-weight: 600;
+}
+
+.data-status .status-dot {
+    width: 5px;
+    height: 5px;
+
+    box-shadow: none;
+}
+
+.ice-status {
+    color: var(--ice);
+}
+
+.ice-status .status-dot {
+    background: var(--ice);
+
+    box-shadow:
+        0 0 0 3px rgba(103, 223, 245, 0.07);
+}
+
+.forecast-range {
+    padding: 5px 8px;
+
+    border-radius: 5px;
+
+    background: var(--blue-soft, rgba(76, 159, 255, 0.1));
+
+    color: #6dbbfa;
+
+    font-size: 7px;
+
+    font-weight: 500;
+}
+
+
+/* =========================================================
+   DATA GRID
+   ========================================================= */
+
+.data-grid {
+    display: grid;
+
+    gap: 9px;
+}
+
+.weather-grid {
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+}
+
+.ice-grid {
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+}
+
+.ocean-grid {
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+}
+
+
+/* =========================================================
+   ENVIRONMENT DATA CARD
+   ========================================================= */
+
+.environment-card {
+    min-height: 72px;
+
+    padding: 12px;
+
+    border-radius: 9px;
+
+    border: 1px solid var(--border-light);
+
+    background: rgba(255, 255, 255, 0.015);
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 11px;
+
+    transition:
+        background var(--transition),
+        border-color var(--transition),
+        transform var(--transition);
+}
+
+.environment-card:hover {
+    background: var(--bg-card-hover);
+
+    border-color: var(--border);
+
+    transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   DATA ICON
+   ========================================================= */
+
+.data-icon {
+    width: 32px;
+    height: 32px;
+
+    flex-shrink: 0;
+
+    border-radius: 8px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+}
+
+.data-icon svg {
+    width: 16px;
+    height: 16px;
+
+    stroke-width: 1.8;
+}
+
+.data-icon.blue {
+    background: var(--weather-soft);
+
+    color: var(--weather);
+}
+
+.data-icon.cyan {
+    background: var(--ice-soft);
+
+    color: var(--ice);
+}
+
+
+/* =========================================================
+   DATA CONTENT
+   ========================================================= */
+
+.data-content span {
+    display: block;
+
+    color: var(--text-muted);
+
+    font-size: 7.5px;
+}
+
+.data-content strong {
+    display: block;
+
+    margin-top: 4px;
+
+    color: var(--text-primary);
+
+    font-size: 11px;
+
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   AI INSIGHT BOX
+   ========================================================= */
+
+.ai-insight {
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 11px;
+
+    margin-top: 13px;
+
+    padding: 12px 13px;
+
+    border-radius: 9px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(169, 133, 255, 0.065),
+            rgba(93, 220, 240, 0.025)
+        );
+
+    border: 1px solid var(--ai-border);
+
+    position: relative;
+
+    overflow: hidden;
+}
+
+
+/* Small AI accent line */
+
+.ai-insight::before {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    top: 0;
+    bottom: 0;
+
+    width: 2px;
+
+    background: linear-gradient(
+        180deg,
+        var(--ai),
+        var(--ai-cyan)
+    );
+}
+
+
+/* =========================================================
+   AI ICON
+   ========================================================= */
+
+.ai-insight-icon {
+    width: 28px;
+    height: 28px;
+
+    flex-shrink: 0;
+
+    border-radius: 7px;
+
+    background: rgba(169, 133, 255, 0.12);
+
+    color: var(--ai);
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+}
+
+.ai-insight-icon svg {
+    width: 14px;
+    height: 14px;
+}
+
+.ice-ai-icon {
+    background: rgba(103, 223, 245, 0.10);
+
+    color: var(--ice);
+}
+
+
+/* =========================================================
+   AI INSIGHT HEADING
+   ========================================================= */
+
+.ai-insight-heading {
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    flex-wrap: wrap;
+}
+
+.ai-insight-heading strong {
+    color: #c8b7ff;
+
+    font-size: 8.5px;
+
+    font-weight: 600;
+}
+
+.ai-insight-heading span {
+    padding: 3px 5px;
+
+    border-radius: 4px;
+
+    background: rgba(169, 133, 255, 0.11);
+
+    color: #a985ff;
+
+    font-size: 5.8px;
+
+    font-weight: 700;
+
+    letter-spacing: 0.6px;
+}
+
+.ai-insight p {
+    margin-top: 5px;
+
+    color: #c2c8d2;
+
+    font-size: 8px;
+
+    line-height: 1.55;
+}
+
+
+/* =========================================================
+   IMPACT ROW
+   ========================================================= */
+
+.impact-row {
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    margin-top: 9px;
+
+    padding-top: 8px;
+
+    border-top: 1px solid rgba(169, 133, 255, 0.10);
+}
+
+.impact-row span {
+    color: var(--text-muted);
+
+    font-size: 7px;
+}
+
+.impact-row strong {
+    color: #e0e4ea;
+
+    font-size: 7.5px;
+
+    font-weight: 500;
+}
+
+
+/* =========================================================
+   SEA ICE SPECIAL
+   ========================================================= */
+
+.sea-ice-section {
+    border-color: rgba(103, 223, 245, 0.10);
+}
+
+.sea-ice-section .environment-card:hover {
+    border-color: rgba(103, 223, 245, 0.20);
+}
+
+
+/* =========================================================
+   OCEAN SECTION
+   ========================================================= */
+
+.ocean-ai .ai-insight-icon {
+    background: var(--ocean-soft);
+
+    color: var(--ocean);
+}
+
+
+/* =========================================================
+   FORECAST
+   ========================================================= */
+
+.forecast-section {
+    overflow: hidden;
+}
+
+
+/* =========================================================
+   FORECAST TIMELINE
+   ========================================================= */
+
+.forecast-timeline {
+    min-height: 100px;
+
+    display: flex;
+
+    align-items: center;
+
+    padding: 5px 20px;
+
+    border: 1px solid var(--border-light);
+
+    border-radius: 10px;
+
+    background: rgba(255, 255, 255, 0.012);
+}
+
+.forecast-point {
+    min-width: 105px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    text-align: center;
+}
+
+.forecast-time {
+    color: var(--text-muted);
+
+    font-size: 6.5px;
+
+    letter-spacing: 0.7px;
+
+    margin-bottom: 9px;
+}
+
+.forecast-marker {
+    width: 16px;
+    height: 16px;
+
+    border-radius: 50%;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    position: relative;
+}
+
+.forecast-marker span {
+    width: 6px;
+    height: 6px;
+
+    border-radius: 50%;
+
+    background: currentColor;
+}
+
+.forecast-marker.safe {
+    color: var(--green);
+
+    background: var(--green-soft);
+}
+
+.forecast-marker.moderate {
+    color: var(--orange);
+
+    background: var(--orange-soft);
+}
+
+.forecast-marker.warning {
+    color: var(--red);
+
+    background: var(--red-soft);
+}
+
+.forecast-point strong {
+    margin-top: 8px;
+
+    color: var(--text-secondary);
+
+    font-size: 7.5px;
+
+    font-weight: 500;
+}
+
+.forecast-line {
+    flex: 1;
+
+    height: 1px;
+
+    background: #203448;
+
+    margin-top: 1px;
+}
+
+
+/* =========================================================
+   ROUTE IMPACT
+   ========================================================= */
+
+.route-impact-section {
+    margin-bottom: 15px;
+
+    padding: 18px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #0d1c2e,
+            #0d1b2c
+        );
+
+    border: 1px solid rgba(169, 133, 255, 0.16);
+
+    border-radius: var(--radius-md);
+}
+
+.route-impact-header {
+    display: flex;
+
+    align-items: center;
+
+    gap: 11px;
+
+    margin-bottom: 18px;
+}
+
+.route-impact-icon {
+    width: 36px;
+    height: 36px;
+
+    border-radius: 9px;
+
+    background: var(--ai-soft);
+
+    color: var(--ai);
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+}
+
+.route-impact-icon svg {
+    width: 17px;
+    height: 17px;
+}
+
+.route-impact-header h2 {
+    margin-top: 4px;
+
+    font-size: 14px;
+
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   IMPACT SUMMARY
+   ========================================================= */
+
+.route-impact-content {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+
+    gap: 1px;
+
+    background: var(--border-light);
+
+    border: 1px solid var(--border-light);
+
+    border-radius: 9px;
+
+    overflow: hidden;
+}
+
+.impact-summary {
+    min-height: 66px;
+
+    padding: 12px;
+
+    background: rgba(255, 255, 255, 0.015);
+}
+
+.impact-summary span {
+    display: block;
+
+    color: var(--text-muted);
+
+    font-size: 6.5px;
+
+    letter-spacing: 0.5px;
+}
+
+.impact-summary strong {
+    display: block;
+
+    margin-top: 6px;
+
+    color: var(--text-primary);
+
+    font-size: 11px;
+
+    font-weight: 600;
+}
+
+.moderate-text {
+    color: var(--orange) !important;
+}
+
+
+/* =========================================================
+   AI ROUTE CONCLUSION
+   ========================================================= */
+
+.ai-route-conclusion {
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 11px;
+
+    margin-top: 13px;
+
+    padding: 13px;
+
+    border-radius: 9px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(169, 133, 255, 0.09),
+            rgba(93, 220, 240, 0.025)
+        );
+
+    border: 1px solid var(--ai-border);
+
+    position: relative;
+}
+
+.ai-route-conclusion::before {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    top: 0;
+    bottom: 0;
+
+    width: 2px;
+
+    background: linear-gradient(
+        180deg,
+        var(--ai),
+        var(--ai-cyan)
+    );
+}
+
+.ai-conclusion-icon {
+    width: 29px;
+    height: 29px;
+
+    flex-shrink: 0;
+
+    border-radius: 7px;
+
+    background: rgba(169, 133, 255, 0.12);
+
+    color: var(--ai);
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+}
+
+.ai-conclusion-icon svg {
+    width: 14px;
+    height: 14px;
+}
+
+.ai-conclusion-title {
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+}
+
+.ai-conclusion-title strong {
+    color: #c8b7ff;
+
+    font-size: 8.5px;
+
+    font-weight: 600;
+}
+
+.confidence {
+    padding: 3px 5px;
+
+    border-radius: 4px;
+
+    background: var(--green-soft);
+
+    color: var(--green);
+
+    font-size: 5.8px;
+
+    font-weight: 700;
+
+    letter-spacing: 0.5px;
+}
+
+.ai-route-conclusion p {
+    margin-top: 5px;
+
+    color: #c2c8d2;
+
+    font-size: 8px;
+
+    line-height: 1.55;
+}
+
+
+/* =========================================================
+   ENVIRONMENTAL MONITORING NOTICE
+   ========================================================= */
+
+.environment-alert {
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 10px;
+
+    margin-bottom: 15px;
+
+    padding: 12px 13px;
+
+    border-radius: 9px;
+
+    background: rgba(77, 184, 255, 0.035);
+
+    border: 1px solid rgba(77, 184, 255, 0.10);
+}
+
+.alert-icon {
+    width: 27px;
+    height: 27px;
+
+    flex-shrink: 0;
+
+    border-radius: 7px;
+
+    background: var(--weather-soft);
+
+    color: var(--weather);
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+}
+
+.alert-icon svg {
+    width: 14px;
+    height: 14px;
+}
+
+.alert-content strong {
+    display: block;
+
+    color: #9bc9e9;
+
+    font-size: 8.5px;
+
+    font-weight: 600;
+}
+
+.alert-content p {
+    margin-top: 4px;
+
+    color: var(--text-muted);
+
+    font-size: 7.5px;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.dashboard-footer {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-top: 18px;
+
+    padding: 10px 2px;
+
+    color: var(--text-muted);
+
+    font-size: 7.5px;
+
+    border-top: 1px solid var(--border-light);
+}
+
+.footer-dot {
+    display: inline-block;
+
+    width: 4px;
+    height: 4px;
+
+    margin: 0 5px;
+
+    border-radius: 50%;
+
+    background: var(--green);
+
+    vertical-align: middle;
+}
+
+
+/* =========================================================
+   WARNING / DANGER STATES
+   Ready for JavaScript
+   ========================================================= */
+
+.environment-overview.warning {
+    border-color: rgba(255, 180, 84, 0.18);
+}
+
+.environment-overview.warning .overview-icon {
+    background: var(--orange-soft);
+
+    color: var(--orange);
+}
+
+.environment-overview.danger {
+    border-color: rgba(255, 101, 117, 0.20);
+}
+
+.environment-overview.danger .overview-icon {
+    background: var(--red-soft);
+
+    color: var(--red);
+}
+
+
+/* =========================================================
+   AI WARNING STATE
+   ========================================================= */
+
+.ai-insight.warning {
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255, 180, 84, 0.075),
+            rgba(255, 180, 84, 0.02)
+        );
+
+    border-color: rgba(255, 180, 84, 0.18);
+}
+
+.ai-insight.warning::before {
+    background: var(--orange);
+}
+
+.ai-insight.warning .ai-insight-icon {
+    background: var(--orange-soft);
+
+    color: var(--orange);
+}
+
+.ai-insight.danger {
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255, 101, 117, 0.075),
+            rgba(255, 101, 117, 0.02)
+        );
+
+    border-color: rgba(255, 101, 117, 0.18);
+}
+
+.ai-insight.danger::before {
+    background: var(--red);
+}
+
+.ai-insight.danger .ai-insight-icon {
+    background: var(--red-soft);
+
+    color: var(--red);
+}
+
+
+/* =========================================================
+   SUBTLE AI APPEAR ANIMATION
+   ========================================================= */
+
+.ai-insight,
+.ai-route-conclusion,
+.ai-overview {
+    animation: aiAppear 0.45s ease-out;
+}
+
+@keyframes aiAppear {
+
+    from {
+        opacity: 0;
+
+        transform: translateY(4px);
+    }
+
+    to {
+        opacity: 1;
+
+        transform: translateY(0);
+    }
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 1200px) {
+
+    .main-content {
+        padding: 24px;
+    }
+
+    .environment-overview {
+        grid-template-columns: 1fr;
+    }
+
+    .weather-grid,
+    .ocean-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+    .ice-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+    .top-header {
+        flex-direction: column;
+    }
+
+    .header-right {
+        width: 100%;
+
+        justify-content: flex-start;
+    }
+}
+
+
+/* =========================================================
+   SMALL TABLET
+   ========================================================= */
+
+@media (max-width: 850px) {
+
+    .sidebar {
+        width: 72px;
+
+        padding: 20px 10px;
+    }
+
+    .brand {
+        justify-content: center;
+
+        padding: 4px 0 25px;
+    }
+
+    .brand-text {
+        display: none;
+    }
+
+    .nav-item {
+        justify-content: center;
+
+        padding: 0;
+    }
+
+    .nav-item span {
+        display: none;
+    }
+
+    .nav-alert-count {
+        display: none !important;
+    }
+
+    .system-status {
+        justify-content: center;
+
+        padding: 9px;
+    }
+
+    .system-status div {
+        display: none;
+    }
+
+    .main-content {
+        margin-left: 72px;
+
+        width: calc(100% - 72px);
+    }
+
+    .route-impact-content {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+    .forecast-point {
+        min-width: 80px;
+    }
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+    .main-content {
+        padding: 18px 14px;
+    }
+
+    .weather-grid,
+    .ice-grid,
+    .ocean-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .header-right {
+        flex-wrap: wrap;
+
+        gap: 12px;
+    }
+
+    .user-profile {
+        border-left: none;
+
+        padding-left: 0;
+    }
+
+    .forecast-timeline {
+        overflow-x: auto;
+
+        justify-content: flex-start;
+
+        padding: 15px;
+
+        min-width: 0;
+    }
+
+    .forecast-point {
+        min-width: 80px;
+    }
+
+    .forecast-line {
+        min-width: 25px;
+    }
+
+    .route-impact-content {
+        grid-template-columns: 1fr;
+    }
+
+    .dashboard-footer {
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 5px;
+    }
+
+    .ai-insight,
+    .ai-route-conclusion,
+    .ai-overview {
+        padding: 11px;
+    }
+}

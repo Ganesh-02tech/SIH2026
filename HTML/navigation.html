@@ -1,0 +1,1494 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>Dhruv Netra | Live Navigation</title>
+
+    <!-- Google Font -->
+    <link rel="preconnect"
+        href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+
+    <!-- Leaflet -->
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+        crossorigin=""
+    >
+
+
+    <!-- Navigation CSS -->
+    <link
+        rel="stylesheet"
+        href="../CSS/navigation.css"
+    >
+
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     APPLICATION
+===================================================== -->
+
+<div class="app-shell">
+
+
+    <!-- =================================================
+         SIDEBAR
+    ================================================== -->
+
+    <aside class="sidebar">
+
+
+        <!-- BRAND -->
+
+        <div class="brand">
+
+            <div class="brand-logo">
+                DN
+            </div>
+
+            <div class="brand-text">
+
+                <h1>Dhruv Netra</h1>
+
+                <span>
+                    Antarctic Decision Support
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- NAVIGATION -->
+
+        <nav class="sidebar-nav">
+
+
+            <!-- Dashboard -->
+
+            <a
+                href="dashboard.html"
+                class="nav-item"
+            >
+
+                <i data-lucide="layout-dashboard"></i>
+
+                <span>
+                    Dashboard
+                </span>
+
+            </a>
+
+
+            <!-- Navigation -->
+
+            <a
+                href="navigation.html"
+                class="nav-item active"
+            >
+
+                <i data-lucide="navigation"></i>
+
+                <span>
+                    Navigation
+                </span>
+
+            </a>
+
+
+            <!-- Environment -->
+
+            <a
+                href="environment.html"
+                class="nav-item"
+            >
+
+                <i data-lucide="orbit"></i>
+
+                <span>
+                    Environment
+                </span>
+
+            </a>
+
+
+            <!-- Alerts -->
+
+            <a
+                href="#"
+                class="nav-item"
+                id="alertsNav"
+            >
+
+                <i data-lucide="triangle-alert"></i>
+
+                <span>
+                    Alerts
+                </span>
+
+                <span class="nav-badge">
+                    2
+                </span>
+
+            </a>
+
+
+            <!-- Reports -->
+
+            <a
+                href="#"
+                class="nav-item"
+            >
+
+                <i data-lucide="file-text"></i>
+
+                <span>
+                    Reports
+                </span>
+
+            </a>
+
+
+            <!-- Settings -->
+
+            <a
+                href="#"
+                class="nav-item nav-bottom"
+            >
+
+                <i data-lucide="settings"></i>
+
+                <span>
+                    Settings
+                </span>
+
+            </a>
+
+
+        </nav>
+
+
+        <!-- SYSTEM STATUS -->
+
+        <div class="system-status">
+
+            <span class="status-dot"></span>
+
+            <span>
+                System Online
+            </span>
+
+        </div>
+
+
+    </aside>
+
+
+
+    <!-- =================================================
+         MAIN CONTENT
+    ================================================== -->
+
+    <main class="main-content">
+
+
+        <!-- =================================================
+             TOP HEADER
+        ================================================== -->
+
+        <header class="page-header">
+
+
+            <div class="header-left">
+
+                <span class="eyebrow">
+                    LIVE VOYAGE
+                </span>
+
+                <h2>
+                    Navigation
+                </h2>
+
+                <p>
+                    Real-time vessel tracking,
+                    environmental detection and
+                    route intelligence.
+                </p>
+
+            </div>
+
+
+            <div class="header-right">
+
+
+                <!-- LIVE STATUS -->
+
+                <div class="connection-status">
+
+                    <span class="connection-dot"></span>
+
+                    <span>
+                        Connected
+                    </span>
+
+                </div>
+
+
+                <!-- UPDATE -->
+
+                <div class="header-update">
+
+                    <span>
+                        Last updated
+                    </span>
+
+                    <strong id="lastUpdated">
+                        Just now
+                    </strong>
+
+                </div>
+
+
+                <!-- USER -->
+
+                <div class="user-profile">
+
+                    <div class="user-avatar">
+                        CN
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Captain
+                        </strong>
+
+                        <span>
+                            Navigation Officer
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </header>
+
+
+
+        <!-- =================================================
+             VOYAGE BAR
+        ================================================== -->
+
+        <section class="voyage-bar">
+
+
+            <div class="voyage-route-info">
+
+
+                <div class="route-point">
+
+                    <span>
+                        DEPARTURE
+                    </span>
+
+                    <strong>
+                        India
+                    </strong>
+
+                </div>
+
+
+                <div class="voyage-line">
+
+                    <span class="voyage-progress"
+                        id="voyageProgress">
+                    </span>
+
+                </div>
+
+
+                <div class="route-point destination">
+
+                    <span>
+                        DESTINATION
+                    </span>
+
+                    <strong>
+                        Antarctica
+                    </strong>
+
+                </div>
+
+
+            </div>
+
+
+            <div class="voyage-status">
+
+                <span class="live-dot"></span>
+
+                <span id="voyageStatus">
+                    Ready to Start
+                </span>
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- =================================================
+             MAIN NAVIGATION GRID
+        ================================================== -->
+
+        <section class="navigation-grid">
+
+
+            <!-- =================================================
+                 MAP AREA
+            ================================================== -->
+
+            <div class="map-panel">
+
+
+                <!-- MAP HEADER -->
+
+                <div class="map-header">
+
+
+                    <div>
+
+                        <span class="section-label">
+                            LIVE MAP
+                        </span>
+
+                        <h3>
+                            India → Antarctica
+                        </h3>
+
+                    </div>
+
+
+                    <div class="map-header-actions">
+
+
+                        <div class="map-live-status">
+
+                            <span></span>
+
+                            LIVE
+
+                        </div>
+
+
+                        <button
+                            class="icon-button"
+                            id="centerShipBtn"
+                            title="Center on vessel"
+                        >
+
+                            <i data-lucide="crosshair"></i>
+
+                        </button>
+
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     MAP
+                ================================================== -->
+
+                <div
+                    id="liveMap"
+                    class="live-map"
+                >
+
+
+                    <!-- MAP LOADING -->
+
+                    <div
+                        class="map-loading"
+                        id="mapLoading"
+                    >
+
+                        <div class="loading-spinner"></div>
+
+                        <span>
+                            Loading satellite imagery...
+                        </span>
+
+                    </div>
+
+
+                    <!-- MAP OVERLAY -->
+
+                    <div class="map-overlay-top">
+
+
+                        <div class="map-location">
+
+                            <i data-lucide="map-pin"></i>
+
+                            <span id="currentLocation">
+                                Indian Ocean
+                            </span>
+
+                        </div>
+
+
+                        <div class="radar-status">
+
+                            <span class="radar-status-dot"></span>
+
+                            Radar Active
+
+                        </div>
+
+
+                    </div>
+
+
+                    <!-- MAP LEGEND -->
+
+                    <div class="map-legend">
+
+
+                        <div class="legend-title">
+                            Detection Layers
+                        </div>
+
+
+                        <div class="legend-item">
+
+                            <span class="legend-vessel"></span>
+
+                            Vessel
+
+                        </div>
+
+
+                        <div class="legend-item">
+
+                            <span class="legend-route"></span>
+
+                            Selected Route
+
+                        </div>
+
+
+                        <div class="legend-item">
+
+                            <span class="legend-radar"></span>
+
+                            Radar 30 km
+
+                        </div>
+
+
+                        <div class="legend-item">
+
+                            <span class="legend-ice"></span>
+
+                            Sea Ice
+
+                        </div>
+
+
+                        <div class="legend-item">
+
+                            <span class="legend-danger"></span>
+
+                            Detected Hazard
+
+                        </div>
+
+
+                    </div>
+
+
+                    <!-- MAP SCALE -->
+
+                    <div class="map-scale">
+
+                        <span>
+                            0
+                        </span>
+
+                        <div class="scale-line"></div>
+
+                        <span>
+                            30 km
+                        </span>
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- =================================================
+                     MAP CONTROLS
+                ================================================== -->
+
+                <div class="map-controls">
+
+
+                    <button
+                        class="layer-button active"
+                        data-layer="route"
+                    >
+
+                        <i data-lucide="route"></i>
+
+                        <span>
+                            Route
+                        </span>
+
+                    </button>
+
+
+                    <button
+                        class="layer-button active"
+                        data-layer="radar"
+                    >
+
+                        <i data-lucide="radio"></i>
+
+                        <span>
+                            Radar
+                        </span>
+
+                    </button>
+
+
+                    <button
+                        class="layer-button active"
+                        data-layer="ice"
+                    >
+
+                        <i data-lucide="snowflake"></i>
+
+                        <span>
+                            Sea Ice
+                        </span>
+
+                    </button>
+
+
+                    <button
+                        class="layer-button"
+                        data-layer="weather"
+                    >
+
+                        <i data-lucide="wind"></i>
+
+                        <span>
+                            Weather
+                        </span>
+
+                    </button>
+
+
+                    <button
+                        class="layer-button"
+                        data-layer="ocean"
+                    >
+
+                        <i data-lucide="waves"></i>
+
+                        <span>
+                            Ocean
+                        </span>
+
+                    </button>
+
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- =================================================
+                 RIGHT SIDE PANEL
+            ================================================== -->
+
+            <aside class="navigation-side-panel">
+
+
+                <!-- =================================================
+                     AI INSIGHT
+                ================================================== -->
+
+                <section
+                    class="ai-insight-card"
+                    id="aiInsightCard"
+                >
+
+
+                    <div class="ai-card-header">
+
+
+                        <div class="ai-title">
+
+                            <div class="ai-icon">
+
+                                <i data-lucide="sparkles"></i>
+
+                            </div>
+
+                            <div>
+
+                                <span>
+                                    AI INSIGHT
+                                </span>
+
+                                <strong id="aiInsightTitle">
+                                    Route Monitoring
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <span
+                            class="ai-priority"
+                            id="aiPriority"
+                        >
+                            NORMAL
+                        </span>
+
+
+                    </div>
+
+
+                    <div class="ai-message"
+                        id="aiInsightMessage">
+
+                        Current environmental conditions
+                        are being monitored continuously
+                        along the selected route.
+
+                    </div>
+
+
+                    <div class="ai-impact-grid">
+
+
+                        <div class="impact-item">
+
+                            <span>
+                                Risk
+                            </span>
+
+                            <strong
+                                id="aiRisk"
+                                class="risk-low"
+                            >
+                                Low
+                            </strong>
+
+                        </div>
+
+
+                        <div class="impact-item">
+
+                            <span>
+                                ETA Impact
+                            </span>
+
+                            <strong id="aiEta">
+                                On Schedule
+                            </strong>
+
+                        </div>
+
+
+                        <div class="impact-item">
+
+                            <span>
+                                Fuel Impact
+                            </span>
+
+                            <strong id="aiFuel">
+                                Normal
+                            </strong>
+
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="ai-update">
+
+                        <i data-lucide="refresh-cw"></i>
+
+                        <span>
+                            Next analysis
+                        </span>
+
+                        <strong id="nextAiUpdate">
+                            00:30
+                        </strong>
+
+                    </div>
+
+
+                </section>
+
+
+
+                <!-- =================================================
+                     VESSEL STATUS
+                ================================================== -->
+
+                <section class="side-card">
+
+
+                    <div class="side-card-header">
+
+                        <div>
+
+                            <span class="section-label">
+                                VESSEL
+                            </span>
+
+                            <h3>
+                                Research Vessel
+                            </h3>
+
+                        </div>
+
+
+                        <span class="vessel-status">
+                            Underway
+                        </span>
+
+                    </div>
+
+
+                    <div class="vessel-display">
+
+
+                        <div class="vessel-icon-large">
+
+                            <span>
+                                🚢
+                            </span>
+
+                        </div>
+
+
+                        <div>
+
+                            <strong>
+                                Antarctic Research Vessel
+                            </strong>
+
+                            <span>
+                                ARV-01
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="vessel-data-grid">
+
+
+                        <div>
+
+                            <span>
+                                Speed
+                            </span>
+
+                            <strong id="vesselSpeed">
+                                16.8 kn
+                            </strong>
+
+                        </div>
+
+
+                        <div>
+
+                            <span>
+                                Heading
+                            </span>
+
+                            <strong id="vesselHeading">
+                                182°
+                            </strong>
+
+                        </div>
+
+
+                        <div>
+
+                            <span>
+                                Fuel
+                            </span>
+
+                            <strong id="vesselFuel">
+                                72%
+                            </strong>
+
+                        </div>
+
+
+                        <div>
+
+                            <span>
+                                Progress
+                            </span>
+
+                            <strong id="vesselProgress">
+                                64%
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                </section>
+
+
+
+                <!-- =================================================
+                     ROUTE PLANNER
+                ================================================== -->
+
+                <section class="side-card route-planner-card">
+
+
+                    <div class="side-card-header">
+
+                        <div>
+
+                            <span class="section-label">
+                                ROUTE PLANNER
+                            </span>
+
+                            <h3>
+                                Voyage Route
+                            </h3>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="route-inputs">
+
+
+                        <div class="route-input">
+
+                            <label>
+                                Start Point
+                            </label>
+
+                            <div class="input-box">
+
+                                <i data-lucide="map-pin"></i>
+
+                                <span>
+                                    India Port
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="route-input">
+
+                            <label>
+                                End Point
+                            </label>
+
+                            <div class="input-box">
+
+                                <i data-lucide="flag"></i>
+
+                                <span>
+                                    Antarctica
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+
+                    <button
+                        class="generate-route-button"
+                        id="generateRouteBtn"
+                    >
+
+                        <i data-lucide="route"></i>
+
+                        Generate Routes
+
+                    </button>
+
+
+
+                    <!-- ROUTE OPTIONS -->
+
+                    <div
+                        class="route-options"
+                        id="routeOptions"
+                    >
+
+
+                        <div class="route-option"
+                            data-route="A">
+
+                            <div class="route-name">
+
+                                <span>
+                                    A
+                                </span>
+
+                                <strong>
+                                    Route A
+                                </strong>
+
+                            </div>
+
+                            <div class="route-meta">
+                                Base distance
+                            </div>
+
+                        </div>
+
+
+                        <div
+                            class="route-option selected"
+                            data-route="B"
+                        >
+
+                            <div class="route-name">
+
+                                <span>
+                                    B
+                                </span>
+
+                                <strong>
+                                    Route B
+                                </strong>
+
+                            </div>
+
+                            <div class="route-meta">
+                                AI Selected
+                            </div>
+
+                        </div>
+
+
+                        <div class="route-option"
+                            data-route="C">
+
+                            <div class="route-name">
+
+                                <span>
+                                    C
+                                </span>
+
+                                <strong>
+                                    Route C
+                                </strong>
+
+                            </div>
+
+                            <div class="route-meta">
+                                Lower ice exposure
+                            </div>
+
+                        </div>
+
+
+                        <div class="route-option"
+                            data-route="D">
+
+                            <div class="route-name">
+
+                                <span>
+                                    D
+                                </span>
+
+                                <strong>
+                                    Route D
+                                </strong>
+
+                            </div>
+
+                            <div class="route-meta">
+                                Extended route
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    <!-- ROUTE AI EXPLANATION -->
+
+                    <div
+                        class="route-ai-insight"
+                        id="routeAiInsight"
+                    >
+
+                        <div class="route-ai-title">
+
+                            <i data-lucide="sparkles"></i>
+
+                            <strong>
+                                Why Route B?
+                            </strong>
+
+                        </div>
+
+
+                        <p>
+
+                            Route B is approximately
+                            30 km longer than Route A,
+                            but current forecasts indicate
+                            lower sea-ice concentration,
+                            lower iceberg exposure and
+                            improved fuel efficiency.
+
+                        </p>
+
+
+                    </div>
+
+
+                </section>
+
+
+
+            </aside>
+
+        </section>
+
+
+
+        <!-- =================================================
+             LOWER TELEMETRY
+        ================================================== -->
+
+        <section class="telemetry-grid">
+
+
+            <!-- Position -->
+
+            <div class="telemetry-card">
+
+                <div class="telemetry-icon position">
+
+                    <i data-lucide="map-pin"></i>
+
+                </div>
+
+                <div>
+
+                    <span>
+                        CURRENT POSITION
+                    </span>
+
+                    <strong id="coordinates">
+                        28.6139° S, 42.1250° E
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- Distance -->
+
+            <div class="telemetry-card">
+
+                <div class="telemetry-icon distance">
+
+                    <i data-lucide="move-horizontal"></i>
+
+                </div>
+
+                <div>
+
+                    <span>
+                        DISTANCE REMAINING
+                    </span>
+
+                    <strong id="distanceRemaining">
+                        3,010 km
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- ETA -->
+
+            <div class="telemetry-card">
+
+                <div class="telemetry-icon eta">
+
+                    <i data-lucide="clock-3"></i>
+
+                </div>
+
+                <div>
+
+                    <span>
+                        ESTIMATED ARRIVAL
+                    </span>
+
+                    <strong id="estimatedArrival">
+                        5d 14h
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- Heading -->
+
+            <div class="telemetry-card">
+
+                <div class="telemetry-icon heading">
+
+                    <i data-lucide="compass"></i>
+
+                </div>
+
+                <div>
+
+                    <span>
+                        HEADING
+                    </span>
+
+                    <strong id="currentHeading">
+                        182° S
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- =================================================
+             VOYAGE CONTROLS
+        ================================================== -->
+
+        <section class="voyage-controls">
+
+
+            <div class="control-left">
+
+
+                <button
+                    class="start-voyage-button"
+                    id="startVoyageBtn"
+                >
+
+                    <i data-lucide="play"></i>
+
+                    <span>
+                        Start Voyage
+                    </span>
+
+                </button>
+
+
+                <button
+                    class="pause-voyage-button"
+                    id="pauseVoyageBtn"
+                    disabled
+                >
+
+                    <i data-lucide="pause"></i>
+
+                    <span>
+                        Pause
+                    </span>
+
+                </button>
+
+
+                <button
+                    class="reset-voyage-button"
+                    id="resetVoyageBtn"
+                >
+
+                    <i data-lucide="rotate-ccw"></i>
+
+                    <span>
+                        Reset
+                    </span>
+
+                </button>
+
+
+            </div>
+
+
+            <div class="control-right">
+
+
+                <div class="simulation-status">
+
+                    <span
+                        class="simulation-dot"
+                        id="simulationDot"
+                    ></span>
+
+                    <span id="simulationText">
+                        Voyage simulation ready
+                    </span>
+
+                </div>
+
+
+                <div class="radar-range">
+
+                    <i data-lucide="radio-tower"></i>
+
+                    Radar range:
+
+                    <strong>
+                        30 km
+                    </strong>
+
+                </div>
+
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- =================================================
+             EVENT FEED
+        ================================================== -->
+
+        <section class="event-feed-section">
+
+
+            <div class="event-feed-header">
+
+                <div>
+
+                    <span class="section-label">
+                        VOYAGE EVENTS
+                    </span>
+
+                    <h3>
+                        Live Detection Feed
+                    </h3>
+
+                </div>
+
+
+                <span class="event-live">
+
+                    <span></span>
+
+                    Monitoring
+
+                </span>
+
+            </div>
+
+
+            <div
+                class="event-feed"
+                id="eventFeed"
+            >
+
+
+                <div class="event-item normal">
+
+                    <div class="event-icon">
+
+                        <i data-lucide="navigation"></i>
+
+                    </div>
+
+                    <div class="event-content">
+
+                        <strong>
+                            Route B active
+                        </strong>
+
+                        <span>
+                            Vessel is proceeding
+                            toward Antarctica.
+                        </span>
+
+                    </div>
+
+                    <time>
+                        Now
+                    </time>
+
+                </div>
+
+
+                <div class="event-item normal">
+
+                    <div class="event-icon">
+
+                        <i data-lucide="radio"></i>
+
+                    </div>
+
+                    <div class="event-content">
+
+                        <strong>
+                            Radar monitoring active
+                        </strong>
+
+                        <span>
+                            30 km detection radius
+                            is active around the vessel.
+                        </span>
+
+                    </div>
+
+                    <time>
+                        Now
+                    </time>
+
+                </div>
+
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- =================================================
+             FOOTER
+        ================================================== -->
+
+        <footer class="page-footer">
+
+            <span>
+                Dhruv Netra • Antarctic Decision Support System
+            </span>
+
+            <span>
+                Navigation data continuously monitored
+            </span>
+
+        </footer>
+
+
+    </main>
+
+</div>
+
+
+
+<!-- =====================================================
+     LEAFLET JS
+===================================================== -->
+
+<script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin="">
+</script>
+
+
+<!-- =====================================================
+     ICON INITIALIZATION
+===================================================== -->
+
+<script>
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        () => {
+
+            if (
+                typeof lucide !== "undefined"
+            ) {
+
+                lucide.createIcons();
+
+            }
+
+        }
+    );
+
+</script>
+
+
+<!-- =====================================================
+     NAVIGATION JS
+===================================================== -->
+
+<script
+    src="../JAVASCRIPT/navigation.js">
+</script>
+
+
+</body>
+
+</html>

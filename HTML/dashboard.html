@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dhruv Netra | Dashboard</title>
+
+    <!-- Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Dashboard CSS -->
+    <link rel="stylesheet" href="../CSS/dashboard.css">
+</head>
+
+<body>
+
+<div class="app-container">
+
+    <!-- ================= SIDEBAR ================= -->
+    <aside class="sidebar">
+
+        <div class="brand">
+            <div class="brand-icon">DN</div>
+
+            <div class="brand-text">
+                <h2>Dhruv Netra</h2>
+                <span>Antarctic Decision Support</span>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+
+            <a href="#" class="nav-item active">
+                <span class="nav-icon">⌂</span>
+                <span>Dashboard</span>
+            </a>
+
+            <a href="#" class="nav-item">
+                <span class="nav-icon">⌖</span>
+                <span>Navigation</span>
+            </a>
+
+            <a href="environment.html" class="nav-item">
+                <span class="nav-icon">◌</span>
+                <span>Environment</span>
+            </a>
+
+            <a href="#" class="nav-item">
+                <span class="nav-icon">⚠</span>
+                <span>Alerts</span>
+            </a>
+
+            <a href="#" class="nav-item">
+                <span class="nav-icon">▤</span>
+                <span>Reports</span>
+            </a>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+
+            <a href="#" class="nav-item">
+                <span class="nav-icon">⚙</span>
+                <span>Settings</span>
+            </a>
+
+            <div class="system-status">
+                <span class="status-dot"></span>
+                <div>
+                    <strong>System Online</strong>
+                    <small>All services operational</small>
+                </div>
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <!-- ================= MAIN CONTENT ================= -->
+    <main class="main-content">
+
+        <!-- ================= TOP HEADER ================= -->
+        <header class="top-header">
+
+            <div>
+                <p class="page-label">MISSION CONTROL</p>
+                <h1>Dashboard</h1>
+                <p class="page-description">
+                    Real-time overview of vessel position, voyage progress and environmental conditions.
+                </p>
+            </div>
+
+            <div class="header-right">
+
+                <div class="connection-status">
+                    <span class="status-dot"></span>
+                    Connected
+                </div>
+
+                <div class="last-update">
+                    Last updated
+                    <strong id="lastUpdated">Just now</strong>
+                </div>
+
+                <div class="user-profile">
+                    <div class="profile-avatar">CN</div>
+
+                    <div class="profile-info">
+                        <strong>Captain</strong>
+                        <span>Navigation Officer</span>
+                    </div>
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- ================= SUMMARY CARDS ================= -->
+        <section class="summary-grid">
+
+            <!-- Voyage Progress -->
+            <div class="summary-card">
+
+                <div class="card-header">
+                    <span>Voyage Progress</span>
+                    <span class="card-icon blue">↗</span>
+                </div>
+
+                <div class="summary-value">
+                    64%
+                </div>
+
+                <div class="progress-track">
+                    <div class="progress-fill" style="width:64%;"></div>
+                </div>
+
+                <div class="summary-footer">
+                    <span>1,940 km completed</span>
+                    <span>3,020 km remaining</span>
+                </div>
+
+            </div>
+
+
+            <!-- Estimated Arrival -->
+            <div class="summary-card">
+
+                <div class="card-header">
+                    <span>Estimated Arrival</span>
+                    <span class="card-icon cyan">◷</span>
+                </div>
+
+                <div class="summary-value">
+                    5d 14h
+                </div>
+
+                <div class="summary-label">
+                    Expected arrival
+                </div>
+
+                <!-- Contextual AI -->
+                <div class="ai-mini eta-ai">
+                    <span class="ai-dot"></span>
+                    <div>
+                        <strong>AI Forecast</strong>
+                        <span>On schedule</span>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <!-- Fuel Remaining -->
+            <div class="summary-card">
+
+                <div class="card-header">
+                    <span>Fuel Remaining</span>
+                    <span class="card-icon green">◒</span>
+                </div>
+
+                <div class="summary-value">
+                    72%
+                </div>
+
+                <div class="summary-label">
+                    Sufficient for planned route
+                </div>
+
+                <!-- Contextual AI -->
+                <div class="ai-mini fuel-ai">
+                    <span class="ai-dot"></span>
+                    <div>
+                        <strong>AI Forecast</strong>
+                        <span>Reserve within safe range</span>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <!-- Mission Status -->
+            <div class="summary-card">
+
+                <div class="card-header">
+                    <span>Mission Status</span>
+                    <span class="card-icon green">✓</span>
+                </div>
+
+                <div class="mission-status">
+                    <span class="status-dot large"></span>
+                    <strong>Normal</strong>
+                </div>
+
+                <div class="summary-label">
+                    Route status: Stable
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= MAIN DASHBOARD GRID ================= -->
+        <section class="dashboard-grid">
+
+
+            <!-- ================= CURRENT VOYAGE ================= -->
+            <div class="panel voyage-panel">
+
+                <div class="panel-header">
+
+                    <div>
+                        <p class="panel-label">ACTIVE VOYAGE</p>
+                        <h2>Current Voyage</h2>
+                    </div>
+
+                    <span class="live-badge">
+                        <span class="status-dot"></span>
+                        LIVE
+                    </span>
+
+                </div>
+
+
+                <!-- Route -->
+                <div class="route-header">
+
+                    <div class="location">
+                        <span class="location-label">DEPARTURE</span>
+                        <strong>India</strong>
+                    </div>
+
+                    <div class="route-line">
+
+                        <div class="route-line-track">
+                            <div class="route-progress"></div>
+                        </div>
+
+                        <div class="ship-marker">
+                            🚢
+                        </div>
+
+                    </div>
+
+                    <div class="location destination">
+                        <span class="location-label">DESTINATION</span>
+                        <strong>Antarctica</strong>
+                    </div>
+
+                </div>
+
+
+                <!-- Voyage Stats -->
+                <div class="voyage-stats">
+
+                    <div class="voyage-stat">
+                        <span>Distance Covered</span>
+                        <strong>1,940 km</strong>
+                    </div>
+
+                    <div class="voyage-stat">
+                        <span>Remaining</span>
+                        <strong>3,020 km</strong>
+                    </div>
+
+                    <div class="voyage-stat">
+                        <span>Current Speed</span>
+                        <strong>16.8 kn</strong>
+                    </div>
+
+                    <div class="voyage-stat">
+                        <span>Heading</span>
+                        <strong>184° S</strong>
+                    </div>
+
+                </div>
+
+
+                <!-- ================= AI ROUTE STATUS ================= -->
+                <div class="ai-route-status">
+
+                    <div class="ai-route-icon">
+                        ✦
+                    </div>
+
+                    <div class="ai-route-content">
+
+                        <div class="ai-route-title">
+                            <strong>AI Route Status</strong>
+                            <span class="ai-status-safe">STABLE</span>
+                        </div>
+
+                        <p>
+                            No significant environmental hazards predicted
+                            along the selected route for the next 12 hours.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- ================= VESSEL STATUS ================= -->
+            <div class="panel vessel-panel">
+
+                <div class="panel-header">
+
+                    <div>
+                        <p class="panel-label">VESSEL</p>
+                        <h2>Vessel Status</h2>
+                    </div>
+
+                    <span class="vessel-status">
+                        Underway
+                    </span>
+
+                </div>
+
+
+                <div class="vessel-visual">
+
+                    <div class="ship-graphic">
+                        🚢
+                    </div>
+
+                    <div>
+                        <strong>Research Vessel</strong>
+                        <span>Antarctic Expedition</span>
+                    </div>
+
+                </div>
+
+
+                <div class="vessel-details">
+
+                    <div>
+                        <span>Vessel ID</span>
+                        <strong>ARV-01</strong>
+                    </div>
+
+                    <div>
+                        <span>Speed</span>
+                        <strong>16.8 kn</strong>
+                    </div>
+
+                    <div>
+                        <span>Heading</span>
+                        <strong>184°</strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- ================= CURRENT VOYAGE DATA ================= -->
+            <div class="panel data-panel">
+
+                <div class="panel-header">
+
+                    <div>
+                        <p class="panel-label">LIVE DATA</p>
+                        <h2>Current Voyage Data</h2>
+                    </div>
+
+                    <span class="live-indicator">
+                        Live
+                    </span>
+
+                </div>
+
+
+                <div class="data-list">
+
+                    <div class="data-row">
+                        <span>Latitude</span>
+                        <strong>28.42° S</strong>
+                    </div>
+
+                    <div class="data-row">
+                        <span>Longitude</span>
+                        <strong>72.18° E</strong>
+                    </div>
+
+                    <div class="data-row">
+                        <span>Speed</span>
+                        <strong>16.8 kn</strong>
+                    </div>
+
+                    <div class="data-row">
+                        <span>Heading</span>
+                        <strong>184°</strong>
+                    </div>
+
+                    <div class="data-row">
+                        <span>Sea State</span>
+                        <strong>Moderate</strong>
+                    </div>
+
+                    <div class="data-row">
+                        <span>Communication</span>
+                        <strong class="online-text">
+                            Connected
+                        </strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- ================= ENVIRONMENT SNAPSHOT ================= -->
+            <div class="panel environment-panel">
+
+                <div class="panel-header">
+
+                    <div>
+                        <p class="panel-label">ENVIRONMENT</p>
+                        <h2>Environmental Snapshot</h2>
+                    </div>
+
+                    <a href="#" class="view-link">
+                        View details →
+                    </a>
+
+                </div>
+
+
+                <div class="environment-grid">
+
+                    <div class="environment-card">
+
+                        <span class="environment-icon">
+                            ☁
+                        </span>
+
+                        <div>
+                            <span>Weather</span>
+                            <strong>-8°C</strong>
+                        </div>
+
+                    </div>
+
+
+                    <div class="environment-card">
+
+                        <span class="environment-icon">
+                            ≋
+                        </span>
+
+                        <div>
+                            <span>Wind</span>
+                            <strong>28 kn</strong>
+                        </div>
+
+                    </div>
+
+
+                    <div class="environment-card">
+
+                        <span class="environment-icon">
+                            ◈
+                        </span>
+
+                        <div>
+                            <span>Sea Ice</span>
+                            <strong>42%</strong>
+                        </div>
+
+                    </div>
+
+
+                    <div class="environment-card">
+
+                        <span class="environment-icon">
+                            ≋
+                        </span>
+
+                        <div>
+                            <span>Wave Height</span>
+                            <strong>2.4 m</strong>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- ================= ALERT PREVIEW ================= -->
+            <div class="panel alert-panel">
+
+                <div class="panel-header">
+
+                    <div>
+                        <p class="panel-label">SAFETY</p>
+                        <h2>Alerts & Warnings</h2>
+                    </div>
+
+                    <span class="alert-count">
+                        0 Active
+                    </span>
+
+                </div>
+
+
+                <div class="no-alert">
+
+                    <div class="no-alert-icon">
+                        ✓
+                    </div>
+
+                    <div>
+                        <strong>No active warnings</strong>
+                        <span>
+                            Current route conditions are within safe limits.
+                        </span>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= FOOTER ================= -->
+        <footer class="dashboard-footer">
+
+            <div>
+                Dhruv Netra Decision Support System
+            </div>
+
+            <div>
+                Data updated automatically
+                <span class="footer-dot"></span>
+                System operational
+            </div>
+
+        </footer>
+
+    </main>
+
+</div>
+
+
+<!-- Dashboard JavaScript -->
+<script src="../JAVASCRIPT/dashboard.js"></script>
+
+</body>
+</html>

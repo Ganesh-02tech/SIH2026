@@ -1,0 +1,1331 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dhruv Netra | Environment</title>
+
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Environment CSS -->
+    <link rel="stylesheet" href="../CSS/environment.css">
+</head>
+
+
+<body>
+
+<div class="app-container">
+
+
+    <!-- =====================================================
+         SIDEBAR
+    ====================================================== -->
+
+    <aside class="sidebar">
+
+        <!-- Brand -->
+        <div class="brand">
+
+            <div class="brand-icon">
+                <i data-lucide="snowflake"></i>
+            </div>
+
+            <div class="brand-text">
+                <h2>Dhruv Netra</h2>
+
+                <span>
+                    Indian Antarctic Navigation Support
+                </span>
+            </div>
+
+        </div>
+
+
+        <!-- Navigation -->
+        <nav class="sidebar-nav">
+
+            <a href="dashboard.html" class="nav-item">
+
+                <i data-lucide="layout-dashboard"></i>
+
+                <span>Dashboard</span>
+
+            </a>
+
+
+            <a href="#" class="nav-item">
+
+                <i data-lucide="compass"></i>
+
+                <span>Navigation</span>
+
+            </a>
+
+
+            <a href="environment.html" class="nav-item active">
+
+                <i data-lucide="waves"></i>
+
+                <span>Environment</span>
+
+            </a>
+
+
+            <a href="#" class="nav-item">
+
+                <i data-lucide="triangle-alert"></i>
+
+                <span>Alerts</span>
+
+                <span class="nav-alert-count">3</span>
+
+            </a>
+
+
+            <a href="#" class="nav-item">
+
+                <i data-lucide="file-text"></i>
+
+                <span>Reports</span>
+
+            </a>
+
+        </nav>
+
+
+        <!-- Sidebar Bottom -->
+        <div class="sidebar-bottom">
+
+            <a href="#" class="nav-item">
+
+                <i data-lucide="settings"></i>
+
+                <span>Settings</span>
+
+            </a>
+
+
+            <div class="system-status">
+
+                <span class="status-dot"></span>
+
+                <div>
+
+                    <strong>System Online</strong>
+
+                    <small>Dhruv Netra v1.0</small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </aside>
+
+
+
+    <!-- =====================================================
+         MAIN CONTENT
+    ====================================================== -->
+
+    <main class="main-content">
+
+
+        <!-- =================================================
+             PAGE HEADER
+        ================================================== -->
+
+        <header class="top-header">
+
+            <div>
+
+                <p class="page-label">
+                    ENVIRONMENT MONITORING
+                </p>
+
+                <h1>
+                    Environment
+                </h1>
+
+                <p class="page-description">
+                    Current and predicted environmental conditions along the selected voyage route.
+                </p>
+
+            </div>
+
+
+            <div class="header-right">
+
+                <div class="connection-status">
+
+                    <span class="status-dot"></span>
+
+                    Live Data
+
+                </div>
+
+
+                <div class="last-update">
+
+                    Last updated
+
+                    <strong id="lastUpdated">
+                        Just now
+                    </strong>
+
+                </div>
+
+
+                <div class="user-profile">
+
+                    <div class="profile-avatar">
+                        DN
+                    </div>
+
+                    <div class="profile-info">
+
+                        <strong>
+                            DN-01
+                        </strong>
+
+                        <span>
+                            Indian Research Vessel
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+
+        <!-- =================================================
+             OVERALL ENVIRONMENT STATUS
+        ================================================== -->
+
+        <section class="environment-overview">
+
+
+            <div class="overview-main">
+
+                <div class="overview-heading">
+
+                    <div class="overview-icon safe">
+
+                        <i data-lucide="shield-check"></i>
+
+                    </div>
+
+
+                    <div>
+
+                        <p class="panel-label">
+                            OVERALL ENVIRONMENTAL STATUS
+                        </p>
+
+                        <h2>
+                            Low Risk
+                        </h2>
+
+                    </div>
+
+                </div>
+
+
+                <p class="overview-description">
+                    Current environmental conditions remain within the expected range for the selected route.
+                </p>
+
+            </div>
+
+
+            <!-- AI Overall Insight -->
+
+            <div class="ai-overview">
+
+                <div class="ai-icon">
+
+                    <i data-lucide="sparkles"></i>
+
+                </div>
+
+
+                <div class="ai-content">
+
+                    <div class="ai-title-row">
+
+                        <strong>
+                            AI Environmental Assessment
+                        </strong>
+
+                        <span class="ai-badge">
+                            AI
+                        </span>
+
+                    </div>
+
+
+                    <p>
+                        Conditions are currently manageable, with a gradual increase in sea-ice risk predicted ahead.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             WEATHER SECTION
+        ================================================== -->
+
+        <section class="environment-section">
+
+
+            <div class="section-heading">
+
+                <div>
+
+                    <p class="panel-label">
+                        METEOROLOGICAL CONDITIONS
+                    </p>
+
+                    <h2>
+                        Weather
+                    </h2>
+
+                </div>
+
+
+                <span class="data-status">
+                    <span class="status-dot"></span>
+                    Live
+                </span>
+
+            </div>
+
+
+
+            <!-- Weather Data -->
+
+            <div class="data-grid weather-grid">
+
+
+                <!-- Temperature -->
+
+                <div class="environment-card weather-card">
+
+                    <div class="data-icon blue">
+
+                        <i data-lucide="thermometer"></i>
+
+                    </div>
+
+
+                    <div class="data-content">
+
+                        <span>
+                            Temperature
+                        </span>
+
+                        <strong>
+                            -8°C
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- Wind -->
+
+                <div class="environment-card weather-card">
+
+                    <div class="data-icon blue">
+
+                        <i data-lucide="wind"></i>
+
+                    </div>
+
+
+                    <div class="data-content">
+
+                        <span>
+                            Wind Speed
+                        </span>
+
+                        <strong>
+                            32 kn
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- Wind Direction -->
+
+                <div class="environment-card weather-card">
+
+                    <div class="data-icon blue">
+
+                        <i data-lucide="navigation"></i>
+
+                    </div>
+
+
+                    <div class="data-content">
+
+                        <span>
+                            Wind Direction
+                        </span>
+
+                        <strong>
+                            NE
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- Pressure -->
+
+                <div class="environment-card weather-card">
+
+                    <div class="data-icon blue">
+
+                        <i data-lucide="gauge"></i>
+
+                    </div>
+
+
+                    <div class="data-content">
+
+                        <span>
+                            Pressure
+                        </span>
+
+                        <strong>
+                            982 hPa
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- Visibility -->
+
+                <div class="environment-card weather-card">
+
+                    <div class="data-icon blue">
+
+                        <i data-lucide="eye"></i>
+
+                    </div>
+
+
+                    <div class="data-content">
+
+                        <span>
+                            Visibility
+                        </span>
+
+                        <strong>
+                            8 km
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- Precipitation -->
+
+                <div class="environment-card weather-card">
+
+                    <div class="data-icon blue">
+
+                        <i data-lucide="cloud-snow"></i>
+
+                    </div>
+
+
+                    <div class="data-content">
+
+                        <span>
+                            Precipitation
+                        </span>
+
+                        <strong>
+                            Snow
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- Weather AI -->
+
+            <div class="ai-insight weather-ai">
+
+                <div class="ai-insight-icon">
+
+                    <i data-lucide="sparkles"></i>
+
+                </div>
+
+
+                <div>
+
+                    <div class="ai-insight-heading">
+
+                        <strong>
+                            AI Weather Impact
+                        </strong>
+
+                        <span>
+                            PREDICTIVE
+                        </span>
+
+                    </div>
+
+
+                    <p>
+                        Strong headwinds are expected to reduce vessel speed over the next 8 hours.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             SEA ICE SECTION
+        ================================================== -->
+
+        <section class="environment-section sea-ice-section">
+
+
+            <div class="section-heading">
+
+                <div>
+
+                    <p class="panel-label">
+                        CRYOSPHERIC CONDITIONS
+                    </p>
+
+                    <h2>
+                        Sea Ice
+                    </h2>
+
+                </div>
+
+
+                <span class="data-status ice-status">
+
+                    <span class="status-dot"></span>
+
+                    Satellite Updated
+
+                </span>
+
+            </div>
+
+
+
+            <div class="data-grid ice-grid">
+
+
+                <!-- Ice Concentration -->
+
+                <div class="environment-card ice-card">
+
+                    <div class="data-icon cyan">
+
+                        <i data-lucide="snowflake"></i>
+
+                    </div>
+
+
+                    <div class="data-content">
+
+                        <span>
+                            Ice Concentration
+                        </span>
+
+                        <strong>
+                            46%
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- Ice Thickness -->
+
+                <div class="environment-card ice-card">
+
+                    <div class="data-icon cyan">
+
+                        <i data-lucide="layers-3"></i>
+
+                    </div>
+
+
+                    <div class="data-content">
+
+                        <span>
+                            Ice Thickness
+                        </span>
+
+                        <strong>
+                            1.2 m
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- Ice Edge -->
+
+                <div class="environment-card ice-card">
+
+                    <div class="data-icon cyan">
+
+                        <i data-lucide="scan-line"></i>
+
+                    </div>
+
+
+                    <div class="data-content">
+
+                        <span>
+                            Ice Edge Distance
+                        </span>
+
+                        <strong>
+                            180 km
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- Ice Drift -->
+
+                <div class="environment-card ice-card">
+
+                    <div class="data-icon cyan">
+
+                        <i data-lucide="move-diagonal"></i>
+
+                    </div>
+
+
+                    <div class="data-content">
+
+                        <span>
+                            Ice Drift
+                        </span>
+
+                        <strong>
+                            0.8 kn
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- Ice Forecast -->
+
+            <div class="ai-insight ice-ai">
+
+                <div class="ai-insight-icon ice-ai-icon">
+
+                    <i data-lucide="sparkles"></i>
+
+                </div>
+
+
+                <div class="ai-insight-main">
+
+                    <div class="ai-insight-heading">
+
+                        <strong>
+                            AI Ice Forecast
+                        </strong>
+
+                        <span>
+                            6–12 HR FORECAST
+                        </span>
+
+                    </div>
+
+
+                    <p>
+                        Sea-ice concentration is expected to increase along the selected route within the next 6–12 hours.
+                    </p>
+
+
+                    <div class="impact-row">
+
+                        <span>
+                            Expected Impact
+                        </span>
+
+                        <strong>
+                            Increased resistance and possible speed reduction
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             OCEAN CONDITIONS
+        ================================================== -->
+
+        <section class="environment-section">
+
+
+            <div class="section-heading">
+
+                <div>
+
+                    <p class="panel-label">
+                        OCEANOGRAPHIC CONDITIONS
+                    </p>
+
+                    <h2>
+                        Ocean Conditions
+                    </h2>
+
+                </div>
+
+
+                <span class="data-status">
+                    <span class="status-dot"></span>
+                    Live
+                </span>
+
+            </div>
+
+
+
+            <div class="data-grid ocean-grid">
+
+
+                <!-- Current Speed -->
+
+                <div class="environment-card ocean-card">
+
+                    <div class="data-icon blue">
+
+                        <i data-lucide="waves"></i>
+
+                    </div>
+
+
+                    <div class="data-content">
+
+                        <span>
+                            Current Speed
+                        </span>
+
+                        <strong>
+                            1.6 kn
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- Current Direction -->
+
+                <div class="environment-card ocean-card">
+
+                    <div class="data-icon blue">
+
+                        <i data-lucide="arrow-down-right"></i>
+
+                    </div>
+
+
+                    <div class="data-content">
+
+                        <span>
+                            Current Direction
+                        </span>
+
+                        <strong>
+                            SW
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- Wave Height -->
+
+                <div class="environment-card ocean-card">
+
+                    <div class="data-icon blue">
+
+                        <i data-lucide="waves"></i>
+
+                    </div>
+
+
+                    <div class="data-content">
+
+                        <span>
+                            Wave Height
+                        </span>
+
+                        <strong>
+                            2.4 m
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- Wave Direction -->
+
+                <div class="environment-card ocean-card">
+
+                    <div class="data-icon blue">
+
+                        <i data-lucide="arrow-right"></i>
+
+                    </div>
+
+
+                    <div class="data-content">
+
+                        <span>
+                            Wave Direction
+                        </span>
+
+                        <strong>
+                            W
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- Sea Surface Temperature -->
+
+                <div class="environment-card ocean-card">
+
+                    <div class="data-icon blue">
+
+                        <i data-lucide="thermometer-snowflake"></i>
+
+                    </div>
+
+
+                    <div class="data-content">
+
+                        <span>
+                            Sea Surface Temperature
+                        </span>
+
+                        <strong>
+                            -1.2°C
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- Sea State -->
+
+                <div class="environment-card ocean-card">
+
+                    <div class="data-icon blue">
+
+                        <i data-lucide="activity"></i>
+
+                    </div>
+
+
+                    <div class="data-content">
+
+                        <span>
+                            Sea State
+                        </span>
+
+                        <strong>
+                            Moderate
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- Ocean AI -->
+
+            <div class="ai-insight ocean-ai">
+
+                <div class="ai-insight-icon">
+
+                    <i data-lucide="sparkles"></i>
+
+                </div>
+
+
+                <div>
+
+                    <div class="ai-insight-heading">
+
+                        <strong>
+                            AI Ocean Impact
+                        </strong>
+
+                        <span>
+                            ROUTE ANALYSIS
+                        </span>
+
+                    </div>
+
+
+                    <p>
+                        Current conditions are moderately favorable, while wave conditions are expected to have limited impact on the selected route.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             ENVIRONMENT FORECAST
+        ================================================== -->
+
+        <section class="environment-section forecast-section">
+
+
+            <div class="section-heading">
+
+                <div>
+
+                    <p class="panel-label">
+                        PREDICTIVE ENVIRONMENT
+                    </p>
+
+                    <h2>
+                        Environmental Forecast
+                    </h2>
+
+                </div>
+
+
+                <span class="forecast-range">
+                    Next 12 Hours
+                </span>
+
+            </div>
+
+
+
+            <!-- Forecast Timeline -->
+
+            <div class="forecast-timeline">
+
+
+                <!-- Now -->
+
+                <div class="forecast-point">
+
+                    <div class="forecast-time">
+                        NOW
+                    </div>
+
+                    <div class="forecast-marker safe">
+                        <span></span>
+                    </div>
+
+                    <strong>
+                        Stable
+                    </strong>
+
+                </div>
+
+
+
+                <!-- 3 Hours -->
+
+                <div class="forecast-line"></div>
+
+                <div class="forecast-point">
+
+                    <div class="forecast-time">
+                        +3 HR
+                    </div>
+
+                    <div class="forecast-marker safe">
+                        <span></span>
+                    </div>
+
+                    <strong>
+                        Stable
+                    </strong>
+
+                </div>
+
+
+
+                <!-- 6 Hours -->
+
+                <div class="forecast-line"></div>
+
+                <div class="forecast-point">
+
+                    <div class="forecast-time">
+                        +6 HR
+                    </div>
+
+                    <div class="forecast-marker moderate">
+                        <span></span>
+                    </div>
+
+                    <strong>
+                        Moderate
+                    </strong>
+
+                </div>
+
+
+
+                <!-- 12 Hours -->
+
+                <div class="forecast-line"></div>
+
+                <div class="forecast-point">
+
+                    <div class="forecast-time">
+                        +12 HR
+                    </div>
+
+                    <div class="forecast-marker warning">
+                        <span></span>
+                    </div>
+
+                    <strong>
+                        Increasing Risk
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- Forecast AI -->
+
+            <div class="ai-insight forecast-ai">
+
+                <div class="ai-insight-icon">
+
+                    <i data-lucide="sparkles"></i>
+
+                </div>
+
+
+                <div>
+
+                    <div class="ai-insight-heading">
+
+                        <strong>
+                            AI Environmental Forecast
+                        </strong>
+
+                        <span>
+                            PREDICTION
+                        </span>
+
+                    </div>
+
+
+                    <p>
+                        Environmental conditions are expected to deteriorate gradually over the next 12 hours, mainly due to increasing sea-ice concentration.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             AI ROUTE IMPACT
+        ================================================== -->
+
+        <section class="route-impact-section">
+
+
+            <div class="route-impact-header">
+
+                <div class="route-impact-icon">
+
+                    <i data-lucide="route"></i>
+
+                </div>
+
+
+                <div>
+
+                    <p class="panel-label">
+                        DECISION SUPPORT
+                    </p>
+
+                    <h2>
+                        AI Route Impact
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="route-impact-content">
+
+
+                <div class="impact-summary">
+
+                    <span>
+                        SELECTED ROUTE
+                    </span>
+
+                    <strong>
+                        Route A
+                    </strong>
+
+                </div>
+
+
+                <div class="impact-summary">
+
+                    <span>
+                        PREDICTED DELAY
+                    </span>
+
+                    <strong>
+                        +3 hrs
+                    </strong>
+
+                </div>
+
+
+                <div class="impact-summary">
+
+                    <span>
+                        ENVIRONMENTAL RISK
+                    </span>
+
+                    <strong class="moderate-text">
+                        Moderate
+                    </strong>
+
+                </div>
+
+
+                <div class="impact-summary">
+
+                    <span>
+                        FUEL IMPACT
+                    </span>
+
+                    <strong>
+                        +4%
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- Main AI Conclusion -->
+
+            <div class="ai-route-conclusion">
+
+                <div class="ai-conclusion-icon">
+
+                    <i data-lucide="sparkles"></i>
+
+                </div>
+
+
+                <div>
+
+                    <div class="ai-conclusion-title">
+
+                        <strong>
+                            AI Assessment
+                        </strong>
+
+                        <span class="confidence">
+                            HIGH CONFIDENCE
+                        </span>
+
+                    </div>
+
+
+                    <p>
+                        Current environmental conditions may increase travel time by approximately 3 hours and increase fuel consumption on the selected route.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             ENVIRONMENTAL ALERT
+        ================================================== -->
+
+        <section class="environment-alert">
+
+
+            <div class="alert-icon">
+
+                <i data-lucide="info"></i>
+
+            </div>
+
+
+            <div class="alert-content">
+
+                <strong>
+                    Environmental Monitoring Active
+                </strong>
+
+                <p>
+                    Dhruv Netra continuously evaluates environmental conditions and updates route-related predictions as new data becomes available.
+                </p>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             FOOTER
+        ================================================== -->
+
+        <footer class="dashboard-footer">
+
+            <div>
+                Dhruv Netra Decision Support System
+            </div>
+
+
+            <div>
+
+                Environmental data updated automatically
+
+                <span class="footer-dot"></span>
+
+                System operational
+
+            </div>
+
+        </footer>
+
+
+    </main>
+
+</div>
+
+
+
+<!-- =====================================================
+     ICON INITIALIZATION
+====================================================== -->
+
+<script>
+    lucide.createIcons();
+</script>
+
+
+<!-- Environment JavaScript -->
+<script src="../JAVASCRIPT/environment.js"></script>
+
+</body>
+
+</html>

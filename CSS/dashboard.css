@@ -1,0 +1,1559 @@
+/* =========================================================
+   DHRUV NETRA — DASHBOARD CSS
+   Minimalistic Antarctic Decision Support Dashboard
+   ========================================================= */
+
+
+/* =========================
+   ROOT VARIABLES
+   ========================= */
+
+:root {
+    --bg-main: #07111f;
+    --bg-sidebar: #091827;
+    --bg-card: #0d1c2e;
+    --bg-card-hover: #11243a;
+
+    --border: rgba(148, 177, 205, 0.12);
+    --border-light: rgba(148, 177, 205, 0.08);
+
+    --text-primary: #f2f7fb;
+    --text-secondary: #9fb0c1;
+    --text-muted: #6f8193;
+
+    --blue: #45a7ff;
+    --blue-soft: rgba(69, 167, 255, 0.12);
+
+    --cyan: #39d5e8;
+    --cyan-soft: rgba(57, 213, 232, 0.12);
+
+    --green: #35d39a;
+    --green-soft: rgba(53, 211, 154, 0.11);
+
+    --orange: #ffad5a;
+    --orange-soft: rgba(255, 173, 90, 0.12);
+
+    --red: #ff6575;
+    --red-soft: rgba(255, 101, 117, 0.12);
+
+    --sidebar-width: 245px;
+
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+
+    --transition: 0.25s ease;
+}
+
+
+/* =========================
+   RESET
+   ========================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: "Inter", sans-serif;
+    background: var(--bg-main);
+    color: var(--text-primary);
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+button,
+input,
+select,
+textarea {
+    font-family: inherit;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+
+/* =========================
+   MAIN APP
+   ========================= */
+
+.app-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+
+/* =========================================================
+   SIDEBAR
+   ========================================================= */
+
+.sidebar {
+    width: var(--sidebar-width);
+    height: 100vh;
+
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    background: var(--bg-sidebar);
+
+    border-right: 1px solid var(--border);
+
+    display: flex;
+    flex-direction: column;
+
+    padding: 24px 15px;
+
+    z-index: 100;
+}
+
+
+/* =========================
+   BRAND
+   ========================= */
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    padding: 4px 9px 28px;
+}
+
+.brand-icon {
+    width: 38px;
+    height: 38px;
+
+    border-radius: 10px;
+
+    background: linear-gradient(
+        135deg,
+        #1977c9,
+        #45b7ff
+    );
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: white;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    letter-spacing: 0.5px;
+
+    box-shadow: 0 8px 22px rgba(31, 145, 235, 0.18);
+}
+
+.brand-text h2 {
+    font-size: 15px;
+    font-weight: 700;
+
+    letter-spacing: -0.2px;
+}
+
+.brand-text span {
+    display: block;
+
+    margin-top: 3px;
+
+    color: var(--text-muted);
+
+    font-size: 8.5px;
+    line-height: 1.3;
+
+    max-width: 130px;
+}
+
+
+/* =========================
+   NAVIGATION
+   ========================= */
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+
+    gap: 5px;
+}
+
+.nav-item {
+    min-height: 42px;
+
+    padding: 0 12px;
+
+    border-radius: 9px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    color: var(--text-secondary);
+
+    font-size: 12px;
+    font-weight: 500;
+
+    transition: background var(--transition),
+                color var(--transition);
+}
+
+.nav-item:hover {
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--text-primary);
+}
+
+.nav-item.active {
+    background: rgba(59, 158, 241, 0.13);
+    color: #5bb4ff;
+}
+
+.nav-icon {
+    width: 18px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 15px;
+
+    opacity: 0.9;
+}
+
+
+/* =========================
+   SIDEBAR BOTTOM
+   ========================= */
+
+.sidebar-bottom {
+    margin-top: auto;
+}
+
+.system-status {
+    margin-top: 18px;
+
+    padding: 12px;
+
+    border: 1px solid var(--border-light);
+
+    border-radius: 10px;
+
+    background: rgba(255, 255, 255, 0.018);
+
+    display: flex;
+    align-items: center;
+
+    gap: 9px;
+}
+
+.system-status strong {
+    display: block;
+
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.system-status small {
+    display: block;
+
+    margin-top: 3px;
+
+    color: var(--text-muted);
+
+    font-size: 8px;
+}
+
+
+/* =========================
+   STATUS DOT
+   ========================= */
+
+.status-dot {
+    width: 7px;
+    height: 7px;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background: var(--green);
+
+    box-shadow: 0 0 0 4px rgba(53, 211, 154, 0.08);
+
+    animation: statusPulse 3s ease-in-out infinite;
+}
+
+.status-dot.large {
+    width: 9px;
+    height: 9px;
+}
+
+@keyframes statusPulse {
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.55;
+    }
+}
+
+
+/* =========================================================
+   MAIN CONTENT
+   ========================================================= */
+
+.main-content {
+    margin-left: var(--sidebar-width);
+
+    width: calc(100% - var(--sidebar-width));
+
+    min-height: 100vh;
+
+    padding: 28px 32px 20px;
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.top-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    gap: 25px;
+
+    margin-bottom: 27px;
+}
+
+.page-label,
+.panel-label {
+    color: #6c8297;
+
+    font-size: 8px;
+    font-weight: 600;
+
+    letter-spacing: 1.5px;
+}
+
+.top-header h1 {
+    margin-top: 5px;
+
+    font-size: 27px;
+    font-weight: 700;
+
+    letter-spacing: -0.8px;
+}
+
+.page-description {
+    margin-top: 7px;
+
+    color: var(--text-secondary);
+
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+
+    gap: 20px;
+}
+
+.connection-status {
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+
+    color: var(--text-secondary);
+
+    font-size: 10px;
+}
+
+.last-update {
+    color: var(--text-muted);
+
+    font-size: 9px;
+
+    line-height: 1.4;
+}
+
+.last-update strong {
+    display: block;
+
+    margin-top: 2px;
+
+    color: var(--text-secondary);
+
+    font-size: 9px;
+    font-weight: 500;
+}
+
+
+/* =========================
+   PROFILE
+   ========================= */
+
+.user-profile {
+    display: flex;
+    align-items: center;
+
+    gap: 9px;
+
+    padding-left: 17px;
+
+    border-left: 1px solid var(--border);
+}
+
+.profile-avatar {
+    width: 32px;
+    height: 32px;
+
+    border-radius: 50%;
+
+    background: #1a3045;
+
+    border: 1px solid rgba(91, 180, 255, 0.2);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #6dbbfa;
+
+    font-size: 9px;
+    font-weight: 700;
+}
+
+.profile-info strong {
+    display: block;
+
+    font-size: 9px;
+    font-weight: 600;
+}
+
+.profile-info span {
+    display: block;
+
+    margin-top: 2px;
+
+    color: var(--text-muted);
+
+    font-size: 8px;
+}
+
+
+/* =========================================================
+   SUMMARY CARDS
+   ========================================================= */
+
+.summary-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+
+    gap: 14px;
+
+    margin-bottom: 15px;
+}
+
+.summary-card {
+    min-height: 143px;
+
+    padding: 17px;
+
+    background: var(--bg-card);
+
+    border: 1px solid var(--border);
+
+    border-radius: var(--radius-md);
+
+    transition:
+        transform var(--transition),
+        border-color var(--transition),
+        background var(--transition);
+}
+
+.summary-card:hover {
+    background: var(--bg-card-hover);
+
+    border-color: rgba(88, 167, 225, 0.18);
+
+    transform: translateY(-1px);
+}
+
+
+/* =========================
+   CARD HEADER
+   ========================= */
+
+.card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    color: var(--text-secondary);
+
+    font-size: 9px;
+    font-weight: 500;
+}
+
+.card-icon {
+    width: 25px;
+    height: 25px;
+
+    border-radius: 7px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 12px;
+}
+
+.card-icon.blue {
+    background: var(--blue-soft);
+    color: var(--blue);
+}
+
+.card-icon.cyan {
+    background: var(--cyan-soft);
+    color: var(--cyan);
+}
+
+.card-icon.green {
+    background: var(--green-soft);
+    color: var(--green);
+}
+
+
+/* =========================
+   SUMMARY VALUE
+   ========================= */
+
+.summary-value {
+    margin-top: 17px;
+
+    color: var(--text-primary);
+
+    font-size: 25px;
+    font-weight: 700;
+
+    letter-spacing: -0.7px;
+}
+
+.summary-label {
+    margin-top: 5px;
+
+    color: var(--text-muted);
+
+    font-size: 8.5px;
+}
+
+
+/* =========================
+   PROGRESS
+   ========================= */
+
+.progress-track {
+    height: 4px;
+
+    margin-top: 13px;
+
+    background: #15283a;
+
+    border-radius: 20px;
+
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+
+    border-radius: inherit;
+
+    background: linear-gradient(
+        90deg,
+        #267fc7,
+        #52b5ff
+    );
+
+    transition: width 0.8s ease;
+}
+
+.summary-footer {
+    display: flex;
+    justify-content: space-between;
+
+    margin-top: 8px;
+
+    color: var(--text-muted);
+
+    font-size: 7.5px;
+}
+
+
+/* =========================================================
+   AI MINI INSIGHT
+   ========================================================= */
+
+.ai-mini {
+    display: flex;
+    align-items: center;
+
+    gap: 7px;
+
+    margin-top: 13px;
+
+    padding-top: 9px;
+
+    border-top: 1px solid var(--border-light);
+}
+
+.ai-mini .ai-dot {
+    width: 5px;
+    height: 5px;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background: var(--cyan);
+}
+
+.ai-mini strong {
+    display: inline-block;
+
+    margin-right: 5px;
+
+    color: #9bc9e9;
+
+    font-size: 7.5px;
+    font-weight: 600;
+}
+
+.ai-mini span:not(.ai-dot) {
+    color: var(--text-muted);
+
+    font-size: 7.5px;
+}
+
+
+/* =========================================================
+   MISSION STATUS
+   ========================================================= */
+
+.mission-status {
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+
+    margin-top: 20px;
+}
+
+.mission-status strong {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   DASHBOARD GRID
+   ========================================================= */
+
+.dashboard-grid {
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1.55fr)
+        minmax(280px, 0.85fr);
+
+    gap: 14px;
+}
+
+
+/* =========================================================
+   PANELS
+   ========================================================= */
+
+.panel {
+    background: var(--bg-card);
+
+    border: 1px solid var(--border);
+
+    border-radius: var(--radius-md);
+
+    padding: 18px;
+
+    min-width: 0;
+}
+
+.panel-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-bottom: 20px;
+}
+
+.panel-header h2 {
+    margin-top: 4px;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    letter-spacing: -0.2px;
+}
+
+.panel-label {
+    font-size: 7.5px;
+}
+
+
+/* =========================================================
+   CURRENT VOYAGE
+   ========================================================= */
+
+.voyage-panel {
+    min-height: 310px;
+}
+
+.live-badge {
+    display: flex;
+    align-items: center;
+
+    gap: 6px;
+
+    padding: 5px 8px;
+
+    border-radius: 6px;
+
+    background: var(--green-soft);
+
+    color: var(--green);
+
+    font-size: 7px;
+    font-weight: 600;
+
+    letter-spacing: 0.6px;
+}
+
+
+/* =========================
+   ROUTE HEADER
+   ========================= */
+
+.route-header {
+    display: grid;
+
+    grid-template-columns: 90px 1fr 90px;
+
+    align-items: center;
+
+    gap: 15px;
+
+    margin-top: 20px;
+}
+
+.location-label {
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: var(--text-muted);
+
+    font-size: 7px;
+
+    letter-spacing: 0.8px;
+}
+
+.location strong {
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.destination {
+    text-align: right;
+}
+
+
+/* =========================
+   ROUTE LINE
+   ========================= */
+
+.route-line {
+    position: relative;
+
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+}
+
+.route-line-track {
+    width: 100%;
+    height: 2px;
+
+    background: #23384c;
+
+    position: relative;
+
+    overflow: hidden;
+}
+
+.route-progress {
+    width: 64%;
+    height: 100%;
+
+    background: linear-gradient(
+        90deg,
+        #267fc7,
+        #4eb4ff
+    );
+}
+
+.ship-marker {
+    position: absolute;
+
+    left: 64%;
+
+    top: 50%;
+
+    transform: translate(-50%, -50%);
+
+    width: 28px;
+    height: 28px;
+
+    border-radius: 50%;
+
+    background: #12304a;
+
+    border: 1px solid rgba(73, 171, 255, 0.35);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 13px;
+
+    box-shadow: 0 0 0 5px rgba(69, 167, 255, 0.05);
+
+    transition: left 1s ease;
+}
+
+
+/* =========================
+   VOYAGE STATS
+   ========================= */
+
+.voyage-stats {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+
+    gap: 1px;
+
+    margin-top: 20px;
+
+    background: var(--border-light);
+
+    border: 1px solid var(--border-light);
+
+    border-radius: 9px;
+
+    overflow: hidden;
+}
+
+.voyage-stat {
+    padding: 12px;
+
+    background: rgba(255, 255, 255, 0.015);
+}
+
+.voyage-stat span {
+    display: block;
+
+    color: var(--text-muted);
+
+    font-size: 7.5px;
+}
+
+.voyage-stat strong {
+    display: block;
+
+    margin-top: 5px;
+
+    color: var(--text-primary);
+
+    font-size: 10px;
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   AI ROUTE STATUS
+   ========================================================= */
+
+.ai-route-status {
+    display: flex;
+    align-items: flex-start;
+
+    gap: 10px;
+
+    margin-top: 15px;
+
+    padding: 11px 12px;
+
+    border-radius: 9px;
+
+    background: rgba(57, 213, 232, 0.045);
+
+    border: 1px solid rgba(57, 213, 232, 0.10);
+}
+
+.ai-route-icon {
+    width: 23px;
+    height: 23px;
+
+    flex-shrink: 0;
+
+    border-radius: 6px;
+
+    background: var(--cyan-soft);
+
+    color: var(--cyan);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 11px;
+}
+
+.ai-route-title {
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+}
+
+.ai-route-title strong {
+    font-size: 8.5px;
+    font-weight: 600;
+}
+
+.ai-status-safe {
+    padding: 3px 5px;
+
+    border-radius: 4px;
+
+    background: var(--green-soft);
+
+    color: var(--green);
+
+    font-size: 6px;
+    font-weight: 700;
+
+    letter-spacing: 0.5px;
+}
+
+.ai-route-content p {
+    margin-top: 4px;
+
+    color: var(--text-muted);
+
+    font-size: 7.5px;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   VESSEL PANEL
+   ========================================================= */
+
+.vessel-status {
+    padding: 5px 8px;
+
+    border-radius: 6px;
+
+    background: var(--green-soft);
+
+    color: var(--green);
+
+    font-size: 7px;
+    font-weight: 600;
+}
+
+.vessel-visual {
+    min-height: 85px;
+
+    padding: 14px;
+
+    background: rgba(255, 255, 255, 0.018);
+
+    border: 1px solid var(--border-light);
+
+    border-radius: 9px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 13px;
+}
+
+.ship-graphic {
+    width: 48px;
+    height: 48px;
+
+    border-radius: 10px;
+
+    background: var(--blue-soft);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 22px;
+}
+
+.vessel-visual strong {
+    display: block;
+
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.vessel-visual span {
+    display: block;
+
+    margin-top: 4px;
+
+    color: var(--text-muted);
+
+    font-size: 7.5px;
+}
+
+.vessel-details {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 8px;
+
+    margin-top: 12px;
+}
+
+.vessel-details div {
+    padding: 10px;
+
+    border: 1px solid var(--border-light);
+
+    border-radius: 8px;
+}
+
+.vessel-details span {
+    display: block;
+
+    color: var(--text-muted);
+
+    font-size: 7px;
+}
+
+.vessel-details strong {
+    display: block;
+
+    margin-top: 4px;
+
+    font-size: 9px;
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   CURRENT DATA
+   ========================================================= */
+
+.data-panel {
+    min-height: 280px;
+}
+
+.live-indicator {
+    color: var(--green);
+
+    font-size: 7.5px;
+
+    position: relative;
+
+    padding-left: 10px;
+}
+
+.live-indicator::before {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    top: 50%;
+
+    width: 5px;
+    height: 5px;
+
+    border-radius: 50%;
+
+    background: var(--green);
+
+    transform: translateY(-50%);
+}
+
+.data-list {
+    display: flex;
+    flex-direction: column;
+
+    border-top: 1px solid var(--border-light);
+}
+
+.data-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    min-height: 34px;
+
+    border-bottom: 1px solid var(--border-light);
+}
+
+.data-row span {
+    color: var(--text-muted);
+
+    font-size: 8px;
+}
+
+.data-row strong {
+    color: var(--text-secondary);
+
+    font-size: 8.5px;
+    font-weight: 500;
+}
+
+.online-text {
+    color: var(--green) !important;
+}
+
+
+/* =========================================================
+   ENVIRONMENT
+   ========================================================= */
+
+.environment-panel {
+    min-height: 230px;
+}
+
+.view-link {
+    color: #59aef0;
+
+    font-size: 7.5px;
+
+    transition: color var(--transition);
+}
+
+.view-link:hover {
+    color: #8dccff;
+}
+
+.environment-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 9px;
+}
+
+.environment-card {
+    min-height: 70px;
+
+    padding: 11px;
+
+    border: 1px solid var(--border-light);
+
+    border-radius: 9px;
+
+    background: rgba(255, 255, 255, 0.015);
+
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    transition:
+        background var(--transition),
+        border-color var(--transition);
+}
+
+.environment-card:hover {
+    background: rgba(255, 255, 255, 0.028);
+
+    border-color: var(--border);
+}
+
+.environment-icon {
+    width: 30px;
+    height: 30px;
+
+    border-radius: 8px;
+
+    background: var(--blue-soft);
+
+    color: #63b9fa;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 13px;
+}
+
+.environment-card span:not(.environment-icon) {
+    display: block;
+
+    color: var(--text-muted);
+
+    font-size: 7.5px;
+}
+
+.environment-card strong {
+    display: block;
+
+    margin-top: 4px;
+
+    font-size: 10px;
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   ALERT PANEL
+   ========================================================= */
+
+.alert-panel {
+    min-height: 230px;
+}
+
+.alert-count {
+    color: var(--green);
+
+    font-size: 7.5px;
+}
+
+.no-alert {
+    min-height: 130px;
+
+    display: flex;
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 11px;
+
+    padding: 20px;
+
+    border: 1px dashed rgba(53, 211, 154, 0.15);
+
+    border-radius: 10px;
+
+    background: rgba(53, 211, 154, 0.025);
+}
+
+.no-alert-icon {
+    width: 31px;
+    height: 31px;
+
+    border-radius: 50%;
+
+    background: var(--green-soft);
+
+    color: var(--green);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 13px;
+}
+
+.no-alert strong {
+    display: block;
+
+    font-size: 9px;
+    font-weight: 600;
+}
+
+.no-alert span {
+    display: block;
+
+    margin-top: 4px;
+
+    color: var(--text-muted);
+
+    font-size: 7.5px;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.dashboard-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-top: 18px;
+    padding: 10px 2px;
+
+    color: var(--text-muted);
+
+    font-size: 7.5px;
+
+    border-top: 1px solid var(--border-light);
+}
+
+.footer-dot {
+    display: inline-block;
+
+    width: 4px;
+    height: 4px;
+
+    margin: 0 5px;
+
+    border-radius: 50%;
+
+    background: var(--green);
+
+    vertical-align: middle;
+}
+
+
+/* =========================================================
+   AI WARNING STATE
+   ========================================================= */
+
+.ai-route-status.warning {
+    background: rgba(255, 173, 90, 0.045);
+
+    border-color: rgba(255, 173, 90, 0.14);
+}
+
+.ai-route-status.warning .ai-route-icon {
+    background: var(--orange-soft);
+
+    color: var(--orange);
+}
+
+.ai-route-status.warning .ai-status-safe {
+    background: var(--orange-soft);
+
+    color: var(--orange);
+}
+
+.ai-route-status.danger {
+    background: rgba(255, 101, 117, 0.045);
+
+    border-color: rgba(255, 101, 117, 0.14);
+}
+
+.ai-route-status.danger .ai-route-icon {
+    background: var(--red-soft);
+
+    color: var(--red);
+}
+
+.ai-route-status.danger .ai-status-safe {
+    background: var(--red-soft);
+
+    color: var(--red);
+}
+
+
+/* =========================================================
+   SUBTLE ALERT ANIMATION
+   ========================================================= */
+
+.ai-route-status.warning,
+.ai-route-status.danger {
+    animation: alertAppear 0.45s ease-out;
+}
+
+@keyframes alertAppear {
+    from {
+        opacity: 0;
+        transform: translateY(4px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* =========================================================
+   RESPONSIVE — TABLET
+   ========================================================= */
+
+@media (max-width: 1200px) {
+
+    .main-content {
+        padding: 24px;
+    }
+
+    .summary-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .top-header {
+        flex-direction: column;
+    }
+
+    .header-right {
+        width: 100%;
+        justify-content: flex-start;
+    }
+}
+
+
+/* =========================================================
+   RESPONSIVE — SMALL TABLET
+   ========================================================= */
+
+@media (max-width: 850px) {
+
+    .sidebar {
+        width: 72px;
+
+        padding: 20px 10px;
+    }
+
+    .brand {
+        justify-content: center;
+
+        padding: 4px 0 25px;
+    }
+
+    .brand-text {
+        display: none;
+    }
+
+    .nav-item {
+        justify-content: center;
+
+        padding: 0;
+    }
+
+    .nav-item span:last-child {
+        display: none;
+    }
+
+    .system-status {
+        justify-content: center;
+
+        padding: 9px;
+    }
+
+    .system-status div {
+        display: none;
+    }
+
+    .main-content {
+        margin-left: 72px;
+
+        width: calc(100% - 72px);
+    }
+
+    .route-header {
+        grid-template-columns: 75px 1fr 75px;
+    }
+}
+
+
+/* =========================================================
+   RESPONSIVE — MOBILE
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+    .main-content {
+        padding: 18px 14px;
+    }
+
+    .summary-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .header-right {
+        flex-wrap: wrap;
+
+        gap: 12px;
+    }
+
+    .user-profile {
+        border-left: none;
+
+        padding-left: 0;
+    }
+
+    .voyage-stats {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+    .environment-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .route-header {
+        grid-template-columns: 65px 1fr 65px;
+
+        gap: 8px;
+    }
+
+    .location strong {
+        font-size: 9px;
+    }
+
+    .dashboard-footer {
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 5px;
+    }
+}
