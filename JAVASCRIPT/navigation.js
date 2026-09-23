@@ -1,550 +1,307 @@
 /* =========================================================
-   DHRUV NETRA — LIVE NAVIGATION
-   navigation.js
-
-   Prototype features:
-   - Satellite map
-   - India → Antarctica route
-   - Route A/B/C/D
-   - Moving research vessel
-   - 30 km radar
-   - Sea-ice zone
-   - Moving iceberg
-   - Hazard detection
-   - AI route insight
-   - ETA / fuel impact
-   - Weather / ocean updates
-   - Timed + event-based AI insights
+   DHRUV NETRA
+   AI ANTARCTIC NAVIGATION DEMO
 ========================================================= */
 
 
 /* =========================================================
-   GLOBAL STATE
+   IMPORTANT LOCATIONS
 ========================================================= */
 
-const navigationState = {
+const INDIA = [
+    18.65,
+    72.30
+];
 
-    /* -------------------------
-       Voyage
-    ------------------------- */
-
-    isRunning: false,
-
-    isPaused: false,
-
-    voyageProgress: 0,
-
-    voyageSpeed: 1,
-
-    simulationTime: 0,
-
-    selectedRoute: "B",
-
-
-    /* -------------------------
-       Vessel
-    ------------------------- */
-
-    vesselSpeed: 16.8,
-
-    vesselHeading: 182,
-
-    fuel: 72,
-
-    distanceRemaining: 10097,
-
-    etaHours: 134,
-
-
-    /* -------------------------
-       Radar
-    ------------------------- */
-
-    radarRadiusKm: 30,
-
-    radarActive: true,
-
-
-    /* -------------------------
-       Environment
-    ------------------------- */
-
-    windSpeed: 32,
-
-    windDirection: "NE",
-
-    waveHeight: 2.4,
-
-    currentSpeed: 1.6,
-
-    currentDirection: "SW",
-
-    seaIceConcentration: 46,
-
-
-    /* -------------------------
-       AI
-    ------------------------- */
-
-    aiRisk: "low",
-
-    aiPriority: "normal",
-
-    aiEtaImpact: 0,
-
-    aiFuelImpact: 0,
-
-    aiNextUpdate: 30,
-
-    lastAIUpdate: 0,
-
-
-    /* -------------------------
-       Detection
-    ------------------------- */
-
-    icebergDetected: false,
-
-    icebergAlertActive: false,
-
-    icebergDistance: null,
-
-    icebergConflictHours: null,
-
-    icebergTriggered: false,
-
-
-    /* -------------------------
-       Event system
-    ------------------------- */
-
-    weatherEventTriggered: false,
-
-    seaIceEventTriggered: false,
-
-    fuelEventTriggered: false,
-
-    routeConflictTriggered: false,
-
-
-    /* -------------------------
-       Animation
-    ------------------------- */
-
-    animationFrame: null,
-
-    lastFrameTime: null
-
-};
-
-
-/* =========================================================
-   ROUTE DATA
-========================================================= */
 
 /*
-    Prototype route coordinates.
+    Bharati Research Station vicinity.
 
-    Route B is the initial AI-selected route.
+    The vessel does NOT navigate directly
+    onto the station itself.
 
-    Destination:
-    Bharati Research Station area,
-    Antarctica.
-
-    Bharati coordinates are approximately
-    69.407° S, 76.195° E.
+    Instead we use an offshore approach point.
 */
+
+const BHARATI = [
+    -69.4068,
+    76.19525
+];
+
+
+const APPROACH = [
+    -69.15,
+    76.20
+];
+
+
+
+/* =========================================================
+   ROUTES
+========================================================= */
 
 const routes = {
 
     A: [
 
-        [19.0760, 72.8777],
+        INDIA,
 
-        [11.5, 70.0],
+        [16, 68],
 
-        [2.0, 67.5],
+        [7, 63],
 
-        [-9.0, 65.5],
+        [-8, 60],
 
-        [-22.0, 67.0],
+        [-25, 62],
 
-        [-35.0, 70.0],
+        [-42, 65],
 
-        [-48.0, 72.0],
+        [-56, 70],
 
-        [-59.0, 73.5],
+        [-63, 75],
 
-        [-69.4089, 76.1902]
+        APPROACH
 
     ],
 
 
     B: [
 
-        [19.0760, 72.8777],
+        INDIA,
 
-        [12.0, 78.0],
+        [16, 68],
 
-        [2.0, 80.0],
+        [6, 65],
 
-        [-10.0, 82.0],
+        [-10, 64],
 
-        [-23.0, 84.0],
+        [-27, 68],
 
-        [-36.0, 84.0],
+        [-43, 72],
 
-        [-49.0, 82.0],
+        [-57, 77],
 
-        [-60.0, 80.0],
+        [-64, 78],
 
-        [-69.4089, 76.1902]
+        APPROACH
 
     ],
 
 
     C: [
 
-        [19.0760, 72.8777],
+        INDIA,
 
-        [13.0, 82.0],
+        [16, 68],
 
-        [3.0, 87.0],
+        [6, 67],
 
-        [-10.0, 90.0],
+        [-10, 69],
 
-        [-24.0, 91.0],
+        [-26, 74],
 
-        [-38.0, 90.0],
+        [-42, 82],
 
-        [-52.0, 86.0],
+        [-56, 85],
 
-        [-62.0, 82.0],
+        [-64, 82],
 
-        [-69.4089, 76.1902]
-
-    ],
-
-
-    D: [
-
-        [19.0760, 72.8777],
-
-        [10.0, 66.0],
-
-        [-1.0, 61.0],
-
-        [-13.0, 61.0],
-
-        [-26.0, 64.0],
-
-        [-40.0, 68.0],
-
-        [-53.0, 71.0],
-
-        [-63.0, 74.0],
-
-        [-69.4089, 76.1902]
+        APPROACH
 
     ]
 
 };
 
 
+
 /* =========================================================
    ROUTE INFORMATION
 ========================================================= */
 
-const routeInfo = {
+const meta = {
 
-    A: {
+    A: [
 
-        distance: 10020,
+        "ROUTE A • SHORTEST",
 
-        fuelImpact: 8,
+        "DISTANCE OPTIMIZED",
 
-        iceRisk: "High",
+        "Shortest water corridor; higher forecast ice exposure."
 
-        icebergRisk: "Moderate",
-
-        etaImpact: 1,
-
-        label: "Base distance"
-
-    },
+    ],
 
 
-    B: {
+    B: [
 
-        distance: 10050,
+        "ROUTE B • BALANCED",
 
-        fuelImpact: 4,
+        "AI OPTIMAL",
 
-        iceRisk: "Low",
+        "Balances distance, sea-ice exposure, current and iceberg risk."
 
-        icebergRisk: "Low",
+    ],
 
-        etaImpact: 2,
+    C: [
 
-        label: "AI Selected"
+        "ROUTE C • ICE AVOIDANCE",
 
-    },
+        "LOW ICE",
 
+        "Wider eastern corridor designed to reduce predicted ice exposure."
 
-    C: {
+    ]
 
-        distance: 10380,
-
-        fuelImpact: 6,
-
-        iceRisk: "Very Low",
-
-        icebergRisk: "Low",
-
-        etaImpact: 3,
-
-        label: "Lower ice exposure"
-
-    },
+};
 
 
-    D: {
 
-        distance: 10190,
+/* =========================================================
+   NAVIGATION STATE
+========================================================= */
 
-        fuelImpact: 9,
+const S = {
 
-        iceRisk: "Moderate",
+    route: "B",
 
-        icebergRisk: "Moderate",
+    path: routes.B.slice(),
 
-        etaImpact: 2,
+    pending: null,
 
-        label: "Extended route"
+    progress: 0,
+
+    running: false,
+
+    paused: false,
+
+    hazard: false,
+
+    rerouted: false,
+
+    layers: {
+
+        route: true,
+
+        iceberg: true,
+
+        ice: true,
+
+        current: true,
+
+        risk: true,
+
+        radar: true
 
     }
 
 };
 
-
-/* =========================================================
-   DOM REFERENCES
-========================================================= */
-
-const DOM = {
-
-    map: document.getElementById("liveMap"),
-
-    mapLoading:
-        document.getElementById("mapLoading"),
-
-
-    lastUpdated:
-        document.getElementById("lastUpdated"),
-
-
-    currentLocation:
-        document.getElementById("currentLocation"),
-
-
-    voyageStatus:
-        document.getElementById("voyageStatus"),
-
-
-    voyageProgress:
-        document.getElementById("voyageProgress"),
-
-
-    vesselSpeed:
-        document.getElementById("vesselSpeed"),
-
-
-    vesselHeading:
-        document.getElementById("vesselHeading"),
-
-
-    vesselFuel:
-        document.getElementById("vesselFuel"),
-
-
-    vesselProgress:
-        document.getElementById("vesselProgress"),
-
-
-    coordinates:
-        document.getElementById("coordinates"),
-
-
-    distanceRemaining:
-        document.getElementById("distanceRemaining"),
-
-
-    estimatedArrival:
-        document.getElementById("estimatedArrival"),
-
-
-    currentHeading:
-        document.getElementById("currentHeading"),
-
-
-    startButton:
-        document.getElementById("startVoyageBtn"),
-
-
-    pauseButton:
-        document.getElementById("pauseVoyageBtn"),
-
-
-    resetButton:
-        document.getElementById("resetVoyageBtn"),
-
-
-    centerButton:
-        document.getElementById("centerShipBtn"),
-
-
-    generateRouteButton:
-        document.getElementById("generateRouteBtn"),
-
-
-    simulationDot:
-        document.getElementById("simulationDot"),
-
-
-    simulationText:
-        document.getElementById("simulationText"),
-
-
-    nextAIUpdate:
-        document.getElementById("nextAiUpdate"),
-
-
-    aiTitle:
-        document.getElementById("aiInsightTitle"),
-
-
-    aiMessage:
-        document.getElementById("aiInsightMessage"),
-
-
-    aiPriority:
-        document.getElementById("aiPriority"),
-
-
-    aiRisk:
-        document.getElementById("aiRisk"),
-
-
-    aiEta:
-        document.getElementById("aiEta"),
-
-
-    aiFuel:
-        document.getElementById("aiFuel"),
-
-
-    routeAI:
-        document.getElementById("routeAiInsight"),
-
-
-    eventFeed:
-        document.getElementById("eventFeed")
-
-};
 
 
 /* =========================================================
    MAP VARIABLES
 ========================================================= */
 
-let map = null;
+let map;
 
-let satelliteLayer = null;
+let mapViewport;
+
+let vessel;
+
+let iceberg;
+
+let iceTrail;
+
+let prediction;
+
+let icebergLayers = [];
+
+let radarLayer;
+
+let nearestIceberg = null;
+
+const RADAR_RADIUS_KM = 120;
+
+const icebergTracks = [
+    {
+        id: "IB-042",
+        start: [-24, 65],
+        end: [-35, 74],
+        color: "#ff5367"
+    },
+    {
+        id: "IB-087",
+        start: [-36, 76],
+        end: [-48, 82],
+        color: "#ffad5a"
+    },
+    {
+        id: "IB-113",
+        start: [-49, 68],
+        end: [-60, 75],
+        color: "#d98cff"
+    }
+];
 
 let routeLayers = {};
 
-let selectedRouteLayer = null;
+let pendingLayer;
 
-let vesselMarker = null;
+let iceLayer;
 
-let radarCircle = null;
+let currentLayer;
 
-let radarVisual = null;
+let riskLayer;
 
-let seaIceLayer = null;
+let animationFrame;
 
-let icebergMarker = null;
+let lastFrameTime = 0;
 
-let icebergTrail = null;
-
-let destinationMarker = null;
-
-let indiaMarker = null;
 
 
 /* =========================================================
-   MAP INITIALIZATION
+   DOM HELPER
 ========================================================= */
 
-function initializeMap() {
+function $(id) {
 
-    if (
-        typeof L === "undefined"
-    ) {
+    return document.getElementById(id);
 
-        console.error(
-            "Leaflet could not be loaded."
-        );
-
-        showMapError(
-            "Map library could not be loaded. Check the Leaflet CDN link in navigation.html."
-        );
-
-        return;
-
-    }
+}
 
 
-    if (!DOM.map) {
 
-        console.error(
-            "Map container not found."
-        );
+/* =========================================================
+   INITIALIZE
+========================================================= */
 
-        return;
+function init() {
 
-    }
+    mapViewport = document.getElementById("mapViewport");
 
-
-    /*
-        Initial view:
-        India → Antarctica
-    */
 
     map = L.map(
         "liveMap",
         {
 
-            zoomControl: true,
-
-            attributionControl: true,
-
             minZoom: 2,
 
-            maxZoom: 12
+            maxZoom: 7,
+
+            zoomControl: true
 
         }
+
+    ).setView(
+        [-37, 76],
+        3
     );
 
 
     /*
-        Satellite imagery.
-
-        Esri World Imagery is used as the
-        prototype satellite basemap.
+        Satellite base layer.
     */
 
-    satelliteLayer = L.tileLayer(
+    L.tileLayer(
 
         "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
 
@@ -553,930 +310,1829 @@ function initializeMap() {
             maxZoom: 19,
 
             attribution:
-                "Imagery © Esri, Maxar, Earthstar Geographics, and the GIS User Community"
+                "Imagery © Esri"
 
         }
 
-    );
+    ).addTo(map);
 
 
-    satelliteLayer.addTo(map);
 
+    drawEnvironment();
 
-    /*
-        Fit the complete selected route.
-    */
+    drawRoutes();
 
-    const routeBounds =
-        L.latLngBounds(
-            routes[navigationState.selectedRoute]
-        );
+    drawMarkers();
+
+    nearestIceberg = moveIcebergs(0);
+
+    updateRouteUI();
+
+    updateVessel(INDIA);
+
 
 
     map.fitBounds(
-        routeBounds,
-        {
-            padding: [35, 35]
-        }
-    );
 
+        [
 
-    /*
-        Create routes.
-    */
+            [25, 55],
 
-    createRouteLayers();
+            [-72, 92]
 
-
-    /*
-        Create vessel.
-    */
-
-    createVessel();
-
-
-    /*
-        Create radar.
-    */
-
-    createRadar();
-
-
-    /*
-        Create sea ice.
-    */
-
-    createSeaIceLayer();
-
-
-    /*
-        Destination.
-    */
-
-    createDestination();
-
-
-    /*
-        India marker.
-    */
-
-    createIndiaMarker();
-
-
-    /*
-        Hide loading screen.
-    */
-
-    setTimeout(
-        () => {
-
-            if (DOM.mapLoading) {
-
-                DOM.mapLoading.classList.add(
-                    "hidden"
-                );
-
-            }
-
-        },
-        1200
-    );
-
-}
-
-
-/* =========================================================
-   CREATE ROUTES
-========================================================= */
-
-function createRouteLayers() {
-
-    Object.keys(routes).forEach(
-        routeName => {
-
-            const route =
-                routes[routeName];
-
-
-            routeLayers[routeName] =
-                L.polyline(
-
-                    route,
-
-                    {
-
-                        className:
-                            routeName === navigationState.selectedRoute
-                                ? "route-line selected"
-                                : "route-line alternative",
-
-                        color:
-                            routeName === navigationState.selectedRoute
-                                ? "#63caff"
-                                : "#9db6c6",
-
-                        weight:
-                            routeName === navigationState.selectedRoute
-                                ? 4
-                                : 2,
-
-                        opacity:
-                            routeName === navigationState.selectedRoute
-                                ? 0.9
-                                : 0.42,
-
-                        dashArray:
-                            routeName === navigationState.selectedRoute
-                                ? null
-                                : "8 7"
-
-                    }
-
-                );
-
-
-            routeLayers[routeName]
-                .addTo(map);
-
-
-            routeLayers[routeName]
-                .bindTooltip(
-
-                    `Route ${routeName}`,
-
-                    {
-
-                        sticky: true,
-
-                        direction: "top"
-
-                    }
-
-                );
-
-
-            routeLayers[routeName].on(
-                "click",
-                () => {
-
-                    selectRoute(
-                        routeName,
-                        true
-                    );
-
-                }
-            );
-
-        }
-    );
-
-
-    selectedRouteLayer =
-        routeLayers[
-            navigationState.selectedRoute
-        ];
-
-}
-
-
-/* =========================================================
-   CREATE VESSEL
-========================================================= */
-
-function createVessel() {
-
-    const start =
-        routes[
-            navigationState.selectedRoute
-        ][0];
-
-
-    const vesselIcon =
-        L.divIcon({
-
-            className:
-                "custom-vessel-icon",
-
-            html: `
-
-                <div class="vessel-marker">
-
-                    <div class="vessel-pulse"></div>
-
-                    <div class="vessel-body">
-
-                        <div class="vessel-light"></div>
-
-                        <div class="vessel-bridge"></div>
-
-                    </div>
-
-                </div>
-
-            `,
-
-            iconSize:
-                [42, 42],
-
-            iconAnchor:
-                [21, 21]
-
-        });
-
-
-    vesselMarker =
-        L.marker(
-
-            start,
-
-            {
-
-                icon: vesselIcon,
-
-                zIndexOffset: 1000
-
-            }
-
-        )
-        .addTo(map);
-
-
-    vesselMarker.bindTooltip(
-
-        "ARV-01 • Research Vessel",
+        ],
 
         {
 
-            direction: "top",
-
-            offset: [0, -18]
+            padding: [25, 25]
 
         }
 
     );
 
+    map.setView(INDIA, 3);
+    updateVessel(INDIA);
 
-    updateVesselPosition(
-        start
+
+
+    addEvent(
+
+        "info",
+
+        "Navigation initialized",
+
+        "AI route monitoring is active. Vessel is ready for departure."
+
     );
 
 }
 
 
+
 /* =========================================================
-   CREATE RADAR
+   ENVIRONMENT LAYERS
 ========================================================= */
 
-function createRadar() {
-
-    if (!map || !vesselMarker) {
-        return;
-    }
-
-
-    const position =
-        vesselMarker.getLatLng();
+function drawEnvironment() {
 
 
     /*
-        Actual geographical radar radius.
-        30 km = 30,000 meters.
+        Sea-ice visualization.
+
+        Prototype polygons only.
     */
 
-    radarCircle =
-        L.circle(
+    iceLayer =
+        L.layerGroup()
+            .addTo(map);
 
-            position,
 
-            {
+    [
 
-                radius:
-                    navigationState.radarRadiusKm *
-                    1000,
+        [
 
-                color:
-                    "#67d9ff",
+            [-58, 58],
 
-                weight:
-                    1.5,
+            [-56, 66],
 
-                opacity:
-                    0.75,
+            [-62, 72],
 
-                fillColor:
-                    "#67d9ff",
+            [-68, 72],
 
-                fillOpacity:
-                    0.035,
+            [-68, 62],
 
-                interactive:
-                    false
+            [-64, 56]
 
-            }
+        ],
 
-        ).addTo(map);
 
+        [
 
-    /*
-        Visual radar sweep.
-        This is a UI representation that remains
-        visible while the geographical circle
-        represents the actual 30 km range.
-    */
+            [-63, 69],
 
-    radarVisual =
-        L.marker(
+            [-61, 78],
 
-            position,
+            [-67, 84],
 
-            {
+            [-71, 87],
 
-                icon:
-                    L.divIcon({
+            [-72, 75],
 
-                        className:
-                            "radar-visual-icon",
+            [-69, 67]
 
-                        html: `
+        ],
 
-                            <div
-                                class="radar-visual"
-                                style="
-                                    width:160px;
-                                    height:160px;
-                                    border-radius:50%;
-                                    position:relative;
-                                    border:1px solid rgba(103,217,255,.28);
-                                    background:
-                                      conic-gradient(
-                                        from 0deg,
-                                        transparent 0deg,
-                                        rgba(103,217,255,.16) 22deg,
-                                        transparent 48deg
-                                      );
-                                    animation:
-                                      radarSweep 3s linear infinite;
-                                "
-                            ></div>
 
-                        `,
+        [
 
-                        iconSize:
-                            [160, 160],
+            [-52, 63],
 
-                        iconAnchor:
-                            [80, 80]
+            [-48, 72],
 
-                    }),
+            [-55, 78],
 
-                interactive:
-                    false,
+            [-62, 77],
 
-                zIndexOffset:
-                    -100
+            [-61, 68]
 
-            }
+        ]
 
-        ).addTo(map);
+    ].forEach(
 
-}
+        polygon => {
 
+            L.polygon(
 
-/* =========================================================
-   UPDATE RADAR POSITION
-========================================================= */
-
-function updateRadarPosition(
-    position
-) {
-
-    if (!position) {
-        return;
-    }
-
-
-    if (radarCircle) {
-
-        radarCircle.setLatLng(
-            position
-        );
-
-    }
-
-
-    if (radarVisual) {
-
-        radarVisual.setLatLng(
-            position
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   CREATE SEA ICE
-========================================================= */
-
-function createSeaIceLayer() {
-
-    /*
-        Prototype sea-ice polygons.
-
-        These are visual simulation zones.
-        Later they can be replaced with
-        real sea-ice raster/vector data.
-    */
-
-
-    const iceZones = [
-
-        {
-
-            coords: [
-
-                [-55, 77],
-                [-55, 87],
-                [-67, 88],
-                [-68, 78]
-
-            ],
-
-            concentration: 55
-
-        },
-
-        {
-
-            coords: [
-
-                [-60, 70],
-                [-60, 80],
-                [-69, 82],
-                [-69, 72]
-
-            ],
-
-            concentration: 42
-
-        },
-
-        {
-
-            coords: [
-
-                [-50, 85],
-                [-50, 95],
-                [-65, 95],
-                [-67, 86]
-
-            ],
-
-            concentration: 62
-
-        }
-
-    ];
-
-
-    const group =
-        L.layerGroup();
-
-
-    iceZones.forEach(
-        zone => {
-
-            const polygon =
-                L.polygon(
-
-                    zone.coords,
-
-                    {
-
-                        className:
-                            "sea-ice-zone",
-
-                        color:
-                            zone.concentration >= 60
-                                ? "#7ee8f4"
-                                : "#69d9e9",
-
-                        weight:
-                            1,
-
-                        opacity:
-                            0.55,
-
-                        fillColor:
-                            zone.concentration >= 60
-                                ? "#51bed7"
-                                : "#70ddeb",
-
-                        fillOpacity:
-                            zone.concentration >= 60
-                                ? 0.30
-                                : 0.18
-
-                    }
-
-                );
-
-
-            polygon.bindTooltip(
-
-                `Sea-ice concentration: ${zone.concentration}%`,
+                polygon,
 
                 {
 
-                    sticky: true
+                    color: "#8de7ff",
+
+                    weight: 1,
+
+                    opacity: 0.25,
+
+                    fillColor: "#8de7ff",
+
+                    fillOpacity: 0.08
 
                 }
 
-            );
-
-
-            polygon.addTo(group);
-
-        }
-    );
-
-
-    group.addTo(map);
-
-
-    seaIceLayer = group;
-
-}
-
-
-/* =========================================================
-   CREATE DESTINATION
-========================================================= */
-
-function createDestination() {
-
-    const destination =
-        routes.B[
-            routes.B.length - 1
-        ];
-
-
-    destinationMarker =
-        L.circleMarker(
-
-            destination,
-
-            {
-
-                radius:
-                    6,
-
-                color:
-                    "#ffffff",
-
-                weight:
-                    2,
-
-                fillColor:
-                    "#42b9ff",
-
-                fillOpacity:
-                    0.95
-
-            }
-
-        ).addTo(map);
-
-
-    destinationMarker.bindTooltip(
-
-        "Bharati • Antarctica",
-
-        {
-
-            direction: "top"
+            ).addTo(iceLayer);
 
         }
 
     );
 
-}
-
-
-/* =========================================================
-   CREATE INDIA MARKER
-========================================================= */
-
-function createIndiaMarker() {
-
-    const start =
-        routes.B[0];
-
-
-    indiaMarker =
-        L.circleMarker(
-
-            start,
-
-            {
-
-                radius:
-                    6,
-
-                color:
-                    "#ffffff",
-
-                weight:
-                    2,
-
-                fillColor:
-                    "#27d39b",
-
-                fillOpacity:
-                    0.95
-
-            }
-
-        ).addTo(map);
-
-
-    indiaMarker.bindTooltip(
-
-        "India Port",
-
-        {
-
-            direction: "top"
-
-        }
-
-    );
-
-}
-
-
-/* =========================================================
-   VESSEL POSITION
-========================================================= */
-
-function updateVesselPosition(
-    position
-) {
-
-    if (!vesselMarker) {
-        return;
-    }
-
-
-    vesselMarker.setLatLng(
-        position
-    );
-
-
-    updateRadarPosition(
-        position
-    );
-
-
-    updateLocationText(
-        position
-    );
-
-
-    updateCoordinates(
-        position
-    );
-
-}
-
-
-/* =========================================================
-   GET CURRENT ROUTE
-========================================================= */
-
-function getCurrentRoute() {
-
-    return routes[
-        navigationState.selectedRoute
-    ];
-
-}
-
-
-/* =========================================================
-   ROUTE POSITION INTERPOLATION
-========================================================= */
-
-function getPositionOnRoute(
-    progress
-) {
-
-    const route =
-        getCurrentRoute();
-
-
-    if (!route || route.length < 2) {
-
-        return route
-            ? route[0]
-            : [0, 0];
-
-    }
-
-
-    const clamped =
-        Math.max(
-            0,
-            Math.min(
-                1,
-                progress
-            )
-        );
 
 
     /*
-        Approximate segment lengths.
+        Ocean current layer.
     */
 
-    const lengths = [];
-
-    let totalLength = 0;
-
-
-    for (
-        let i = 0;
-        i < route.length - 1;
-        i++
-    ) {
-
-        const length =
-            haversineKm(
-                route[i],
-                route[i + 1]
-            );
+    currentLayer =
+        L.layerGroup()
+            .addTo(map);
 
 
-        lengths.push(
-            length
+
+    [
+
+        [-35, 68, -25, 5],
+
+        [-42, 73, -30, 8],
+
+        [-50, 79, -25, 12],
+
+        [-58, 78, -35, 7]
+
+    ].forEach(
+
+        ([lat, lon, bearingValue, distance]) => {
+
+            const endpoint =
+                destinationPoint(
+
+                    [lat, lon],
+
+                    bearingValue,
+
+                    distance
+
+                );
+
+
+            L.polyline(
+
+                [
+
+                    [lat, lon],
+
+                    endpoint
+
+                ],
+
+                {
+
+                    color: "#55a9ff",
+
+                    weight: 2,
+
+                    opacity: 0.45
+
+                }
+
+            ).addTo(currentLayer);
+
+        }
+
+    );
+
+
+
+    /*
+        Risk corridor.
+    */
+
+    riskLayer =
+        L.layerGroup()
+            .addTo(map);
+
+
+    L.circle(
+
+        [-52, 80],
+
+        {
+
+            radius: 85000,
+
+            color: "#ffc857",
+
+            weight: 1,
+
+            dashArray: "4 6",
+
+            fillColor: "#ffc857",
+
+            fillOpacity: 0.035
+
+        }
+
+    ).addTo(riskLayer);
+
+}
+
+
+
+/* =========================================================
+   DRAW ROUTES
+========================================================= */
+
+function drawRoutes() {
+
+
+    Object.keys(routes)
+        .forEach(
+
+            routeName => {
+
+                routeLayers[routeName] =
+
+                    L.polyline(
+
+                        routes[routeName],
+
+                        {
+
+                            color:
+                                routeName === "B"
+                                    ? "#56d9ff"
+                                    : "#90a5b1",
+
+                            weight:
+                                routeName === "B"
+                                    ? 4
+                                    : 2,
+
+                            opacity:
+                                routeName === "B"
+                                    ? 0.9
+                                    : 0.32,
+
+                            dashArray:
+                                routeName === "B"
+                                    ? null
+                                    : "7 8"
+
+                        }
+
+                    ).addTo(map);
+
+
+
+                routeLayers[routeName].on(
+
+                    "click",
+
+                    () => {
+
+                        selectRoute(
+                            routeName
+                        );
+
+                    }
+
+                );
+
+            }
+
+        );
+
+}
+
+
+
+/* =========================================================
+   MARKERS
+========================================================= */
+
+function drawMarkers() {
+
+
+    /*
+        Mumbai marker.
+    */
+
+    L.marker(
+
+        INDIA,
+
+        {
+
+            icon:
+
+                L.divIcon(
+
+                    {
+
+                        className: "",
+
+                        html:
+
+                            `<div style="
+                                width:12px;
+                                height:12px;
+                                border-radius:50%;
+                                background:#ffb84d;
+                                border:2px solid white;
+                            "></div>`,
+
+                        iconSize: [12, 12]
+
+                    }
+
+                )
+
+        }
+
+    )
+        .addTo(map)
+
+        .bindTooltip(
+            "MUMBAI DEPARTURE"
         );
 
 
-        totalLength +=
-            length;
+
+    /*
+        Bharati approach marker.
+    */
+
+    L.marker(
+
+        APPROACH,
+
+        {
+
+            icon:
+
+                L.divIcon(
+
+                    {
+
+                        className: "",
+
+                        html:
+
+                            `<div class="station-icon"></div>`,
+
+                        iconSize: [19, 19]
+
+                    }
+
+                )
+
+        }
+
+    )
+        .addTo(map)
+
+        .bindTooltip(
+            "BHARATI OFFSHORE APPROACH"
+        );
+
+
+
+    /*
+        Multiple moving iceberg predictions.
+    */
+
+    icebergTracks.forEach((track, index) => {
+        const trail = L.polyline(
+            [track.start, track.end],
+            {
+                color: track.color,
+                weight: 2,
+                dashArray: "5 6",
+                opacity: 0.8
+            }
+        ).addTo(map);
+
+        const forecast = L.polyline(
+            [track.start, track.end],
+            {
+                color: track.color,
+                weight: 1,
+                dashArray: "2 7",
+                opacity: 0.35
+            }
+        ).addTo(map);
+
+        const marker = L.marker(
+            track.start,
+            {
+                icon: L.divIcon({
+                    className: "",
+                    html: `<div class="iceberg-icon" style="--iceberg-color:${track.color}"></div>`,
+                    iconSize: [16, 16]
+                })
+            }
+        ).addTo(map).bindTooltip(`${track.id} • PREDICTED TRACK`);
+
+        icebergLayers.push({
+            track,
+            trail,
+            forecast,
+            marker,
+            progressOffset: index * 0.13
+        });
+    });
+
+    iceberg = icebergLayers[0].marker;
+    iceTrail = icebergLayers[0].trail;
+    prediction = icebergLayers[0].forecast;
+
+    radarLayer = L.circle(INDIA, {
+        radius: RADAR_RADIUS_KM * 1000,
+        color: "#ffad5a",
+        weight: 1.5,
+        dashArray: "6 7",
+        fillColor: "#ffad5a",
+        fillOpacity: 0.05
+    }).addTo(map);
+
+
+
+    /*
+        Vessel.
+    */
+
+    vessel =
+
+        L.marker(
+
+            INDIA,
+
+            {
+
+                zIndexOffset: 1000,
+
+                icon:
+
+                    L.divIcon(
+
+                        {
+
+                            className: "",
+
+                            html:
+
+                                `
+
+                                <div class="custom-vessel">
+                                    <span class="vessel-arrow">▲</span>
+                                </div>
+
+                                <div class="vessel-label">
+                                    SARASWATI
+                                </div>
+
+                                `,
+
+                            iconSize:
+                                [90, 55],
+
+                            iconAnchor:
+                                [45, 22]
+
+                        }
+
+                    )
+
+            }
+
+        ).addTo(map);
+
+}
+
+
+
+/* =========================================================
+   SELECT ROUTE
+========================================================= */
+
+function selectRoute(routeName) {
+
+
+    if (S.running) {
+
+        addEvent(
+
+            "warning",
+
+            "Route selection locked",
+
+            "Manual selection is disabled after vessel movement begins."
+
+        );
+
+        return;
 
     }
 
 
-    const targetDistance =
-        totalLength *
-        clamped;
+    S.route =
+        routeName;
 
 
-    let travelled = 0;
+    S.path =
+        routes[routeName].slice();
 
 
-    for (
-        let i = 0;
-        i < lengths.length;
-        i++
-    ) {
-
-        const segmentLength =
-            lengths[i];
+    S.progress =
+        0;
 
 
-        if (
-            travelled +
-            segmentLength >=
-            targetDistance
-        ) {
-
-            const localProgress =
-                (
-                    targetDistance -
-                    travelled
-                ) /
-                segmentLength;
+    S.pending =
+        null;
 
 
-            return interpolatePoint(
+    updateRouteUI();
 
-                route[i],
+    updateVessel(INDIA);
 
-                route[i + 1],
+    styleRoutes();
 
-                localProgress
+    document
+        .querySelectorAll("[data-route-option]")
+        .forEach(option => {
+            option.classList.toggle(
+                "selected",
+                option.dataset.routeOption === routeName
+            );
+        });
+
+}
+
+
+
+/* =========================================================
+   STYLE ROUTES
+========================================================= */
+
+function styleRoutes() {
+
+
+    Object.keys(routeLayers)
+        .forEach(
+
+            routeName => {
+
+                routeLayers[routeName]
+                    .setStyle(
+
+                        {
+
+                            color:
+                                routeName === S.route
+                                    ? "#56d9ff"
+                                    : "#90a5b1",
+
+                            weight:
+                                routeName === S.route
+                                    ? 4
+                                    : 2,
+
+                            opacity:
+                                routeName === S.route
+                                    ? 0.9
+                                    : 0.32,
+
+                            dashArray:
+                                routeName === S.route
+                                    ? null
+                                    : "7 8"
+
+                        }
+
+                    );
+
+            }
+
+        );
+
+}
+
+
+
+/* =========================================================
+   UPDATE ROUTE PANEL
+========================================================= */
+
+function updateRouteUI() {
+
+
+    const info =
+        meta[S.route];
+
+
+    $("routeName")
+        .textContent =
+        info[0];
+
+
+    $("routeBadge")
+        .textContent =
+        info[1];
+
+
+    $("routeReason")
+        .textContent =
+        info[2];
+
+
+    updatePanel();
+
+}
+
+
+
+/* =========================================================
+   UPDATE VESSEL
+========================================================= */
+
+function updateVessel(position) {
+
+
+    vessel.setLatLng(
+        position
+    );
+
+    const nextPoint = pointAlongPath(
+        Math.min(1, S.progress + 0.002),
+        S.path
+    );
+
+    const calculatedHeading = calculateBearing(
+        position,
+        nextPoint
+    );
+
+    const heading = Number.isFinite(calculatedHeading)
+        ? calculatedHeading
+        : 180;
+
+    const element = vessel
+        .getElement()
+        ?.querySelector(".vessel-arrow");
+
+    if (element) {
+        element.style.transform = `rotate(${heading}deg)`;
+    }
+
+    orientMapToVessel(heading);
+
+    if (radarLayer) {
+        radarLayer.setLatLng(position);
+
+    }
+
+    if (S.running && map) {
+        map.panTo(position, { animate: false });
+    }
+
+
+    $("coords")
+        .textContent =
+
+        `${Math.abs(position[0]).toFixed(3)}° ${position[0] >= 0 ? "N" : "S"} • ` +
+
+        `${Math.abs(position[1]).toFixed(3)}° ${position[1] >= 0 ? "E" : "W"}`;
+
+
+    $("heading")
+        .textContent =
+        `${Math.round(heading)}°`;
+
+}
+
+
+function orientMapToVessel(heading) {
+
+    if (!map || !mapViewport) {
+        return;
+    }
+
+    mapViewport.style.transform = "none";
+}
+
+
+
+/* =========================================================
+   START VOYAGE
+========================================================= */
+
+function startVoyage() {
+
+
+    S.running =
+        true;
+
+
+    S.paused =
+        false;
+
+
+    $("start")
+        .textContent =
+        "▶ RUNNING";
+
+
+    addEvent(
+
+        "info",
+
+        "Voyage started",
+
+        `Route ${S.route} active. Environmental monitoring is running.`
+
+    );
+
+
+    lastFrameTime =
+        performance.now();
+
+
+    cancelAnimationFrame(
+        animationFrame
+    );
+
+
+    animationFrame =
+        requestAnimationFrame(
+            animateVoyage
+        );
+
+}
+
+
+
+/* =========================================================
+   PAUSE / RESUME VOYAGE
+========================================================= */
+
+function pauseVoyage() {
+
+    if (!S.running) {
+        return;
+    }
+
+    S.paused = !S.paused;
+
+    $("pause")
+        .textContent =
+        S.paused
+            ? "▶ RESUME"
+            : "Ⅱ PAUSE";
+
+    setStatus(
+        S.paused
+            ? "VOYAGE PAUSED"
+            : "NAVIGATION NOMINAL",
+        true
+    );
+
+    addEvent(
+        "info",
+        S.paused ? "Voyage paused" : "Voyage resumed",
+        S.paused
+            ? "Vessel motion paused pending operator action."
+            : "Vessel has resumed movement."
+    );
+}
+
+
+
+/* =========================================================
+   RESET
+========================================================= */
+
+function resetVoyage() {
+
+
+    cancelAnimationFrame(
+        animationFrame
+    );
+
+
+    S.route =
+        "B";
+
+
+    S.path =
+        routes.B.slice();
+
+
+    S.pending =
+        null;
+
+
+    S.progress =
+        0;
+
+
+    S.running =
+        false;
+
+
+    S.paused =
+        false;
+
+
+    S.hazard =
+        false;
+
+
+    S.rerouted =
+        false;
+
+
+
+    if (pendingLayer) {
+
+        map.removeLayer(
+            pendingLayer
+        );
+
+        pendingLayer =
+            null;
+
+    }
+
+
+
+    $("hazard")
+        .classList
+        .remove("show");
+
+
+    $("start")
+        .textContent =
+        "▶ START VOYAGE";
+
+
+    $("pause")
+        .textContent =
+        "Ⅱ PAUSE";
+
+
+    setStatus(
+
+        "NAVIGATION NOMINAL",
+
+        true
+
+    );
+
+
+    updateRouteUI();
+
+    nearestIceberg = moveIcebergs(0);
+
+    updateVessel(
+        INDIA
+    );
+
+
+    addEvent(
+
+        "info",
+
+        "Simulation reset",
+
+        "Vessel returned to Mumbai departure point."
+
+    );
+
+}
+
+
+
+/* =========================================================
+   VOYAGE ANIMATION
+========================================================= */
+
+function animateVoyage(timestamp) {
+
+
+    if (!S.running) {
+
+        return;
+
+    }
+
+
+    const delta =
+        Math.min(
+
+            0.05,
+
+            (timestamp - lastFrameTime) / 1000
+
+        );
+
+
+    lastFrameTime =
+        timestamp;
+
+
+
+    if (!S.paused) {
+
+
+        /*
+            Vessel simulation speed.
+        */
+
+        S.progress +=
+            delta * 0.0045;
+
+
+
+        if (S.progress >= 1) {
+
+            S.progress =
+                1;
+
+
+            S.running =
+                false;
+
+
+            setStatus(
+
+                "ARRIVED • BHARATI APPROACH",
+
+                true
+
+            );
+
+
+            addEvent(
+
+                "info",
+
+                "Voyage completed",
+
+                "Vessel reached the Bharati offshore approach point."
 
             );
 
         }
 
 
-        travelled +=
-            segmentLength;
+
+        const position =
+
+            pointAlongPath(
+
+                S.progress,
+
+                S.path
+
+            );
+
+
+        updateVessel(
+            position
+        );
+
+
+
+        /*
+            Move iceberg.
+        */
+
+        nearestIceberg = moveIcebergs(S.progress);
+
+        const currentDistance = nearestIceberg
+            ? nearestIceberg.distance
+            : Infinity;
+
+
+        $("cpa")
+            .textContent =
+            nearestIceberg
+                ? `${currentDistance.toFixed(1)} km`
+                : "—";
+
+
+
+        /*
+            Automatically trigger hazard.
+        */
+
+        if (
+
+            !S.hazard &&
+
+            !S.rerouted &&
+
+            currentDistance <= RADAR_RADIUS_KM
+
+        ) {
+
+            triggerHazard(nearestIceberg);
+
+        }
+
+
+
+        /*
+            Simulated sea ice.
+        */
+
+        $("ice")
+            .textContent =
+
+            `${Math.round(
+
+                Math.max(
+
+                    24,
+
+                    Math.min(
+
+                        78,
+
+                        27 +
+                        Math.max(
+
+                            0,
+
+                            -position[0] - 35
+
+                        ) * 0.45
+
+                    )
+
+                )
+
+            )}%`;
+
+
+
+        updatePanel();
 
     }
 
 
-    return route[
-        route.length - 1
-    ];
+
+    animationFrame =
+
+        requestAnimationFrame(
+            animateVoyage
+        );
 
 }
 
 
+
 /* =========================================================
-   INTERPOLATE POINT
+   MOVE ICEBERG
 ========================================================= */
 
-function interpolatePoint(
-    a,
-    b,
-    t
+function moveIcebergs(progress) {
+
+    let closest = null;
+
+    icebergLayers.forEach(layer => {
+        const trackProgress = Math.max(
+            0,
+            Math.min(1, progress * 1.15 - 0.08 + layer.progressOffset)
+        );
+
+        const position = interpolatePoint(
+            layer.track.start,
+            layer.track.end,
+            trackProgress
+        );
+
+        layer.marker.setLatLng(position);
+
+        const distance = calculateDistance(
+            pointAlongPath(progress, S.path),
+            position
+        );
+
+        if (!closest || distance < closest.distance) {
+            closest = {
+                id: layer.track.id,
+                position,
+                distance
+            };
+        }
+    });
+
+    return closest;
+}
+
+
+
+function interpolatePoint(start, end, progress) {
+    return [
+        start[0] + (end[0] - start[0]) * progress,
+        start[1] + (end[1] - start[1]) * progress
+    ];
+}
+
+
+
+/* =========================================================
+   ICEBERG HAZARD
+========================================================= */
+
+function triggerHazard(conflict = nearestIceberg) {
+
+
+    if (
+        S.hazard ||
+        S.rerouted
+    ) {
+
+        return;
+
+    }
+
+
+    S.hazard =
+        true;
+
+
+    S.paused =
+        true;
+
+
+
+    /*
+        Show alert.
+    */
+
+    $("hazard")
+        .classList
+        .add("show");
+
+    const currentPosition = pointAlongPath(
+        S.progress,
+        S.path
+    );
+
+    const activeConflict = conflict?.distance <= RADAR_RADIUS_KM
+        ? conflict
+        : {
+            id: "IB-042",
+            position: [currentPosition[0] - 1, currentPosition[1] + 0.6],
+            distance: 80
+        };
+
+    const conflictDistance = activeConflict.distance;
+
+    $("alertCpa")
+        .textContent =
+        `${conflictDistance.toFixed(1)} km`;
+
+
+    $("alertTime")
+        .textContent =
+
+        `${Math.max(
+
+            12,
+
+            Math.round(
+
+                42 -
+                S.progress * 18
+
+            )
+
+        )} min`;
+
+    $("predictionWindow")
+        .textContent =
+        $("alertTime").textContent;
+
+    $("predictionCpa")
+        .textContent =
+        $("alertCpa").textContent;
+
+    $("alertText")
+        .textContent =
+        `${activeConflict.id} entered the ${RADAR_RADIUS_KM} km radar safety zone. AI generated a clearance route before collision risk could develop.`;
+
+
+
+    setStatus(
+
+        "HAZARD • CAPTAIN DECISION REQUIRED",
+
+        false
+
+    );
+
+
+
+    $("routeReason")
+        .textContent =
+
+        `${activeConflict.id} entered the radar zone. AI has generated a clearance route with additional safety margin.`;
+
+
+
+    /*
+        Generate route from current
+        vessel position.
+    */
+
+    const clearanceSide = activeConflict.position[1] >= currentPosition[1]
+        ? -1
+        : 1;
+
+    S.pending = [
+        currentPosition,
+        [currentPosition[0] - 2, currentPosition[1] + clearanceSide * 3.2],
+        [currentPosition[0] - 7, currentPosition[1] + clearanceSide * 5.5],
+        [currentPosition[0] - 14, currentPosition[1] + clearanceSide * 4.5],
+        ...S.path.slice(-3)
+    ];
+
+
+
+    /*
+        Draw proposed route.
+    */
+
+    if (pendingLayer) {
+
+        map.removeLayer(
+            pendingLayer
+        );
+
+    }
+
+
+    pendingLayer =
+
+        L.polyline(
+
+            S.pending,
+
+            {
+
+                color:
+                    "#ffc857",
+
+                weight:
+                    4,
+
+                dashArray:
+                    "10 7"
+
+            }
+
+        ).addTo(map);
+
+
+
+    addEvent(
+
+        "critical",
+
+        "Iceberg conflict predicted",
+
+        "IB-042 trajectory is converging with the active navigation corridor. AI route regenerated."
+
+    );
+
+}
+
+
+
+/* =========================================================
+   APPROVE AI REROUTE
+========================================================= */
+
+function approveReroute() {
+
+
+    if (!S.pending) {
+
+        return;
+
+    }
+
+
+    /*
+        New route becomes active.
+    */
+
+    S.path =
+        S.pending.slice();
+
+
+    S.progress =
+        0;
+
+
+    S.hazard =
+        false;
+
+
+    S.rerouted =
+        true;
+
+
+    S.paused =
+        false;
+
+
+
+    $("hazard")
+        .classList
+        .remove("show");
+
+
+
+    if (pendingLayer) {
+
+        map.removeLayer(
+            pendingLayer
+        );
+
+        pendingLayer =
+            null;
+
+    }
+
+
+
+    $("routeName")
+        .textContent =
+        "AI REROUTE • ICEBERG AVOIDANCE";
+
+
+    $("routeBadge")
+        .textContent =
+        "CAPTAIN APPROVED";
+
+
+    $("routeReason")
+        .textContent =
+
+        "Captain approved the AI-generated detour. Vessel is following the new safety corridor.";
+
+
+
+    setStatus(
+
+        "REROUTE ACTIVE • CAPTAIN APPROVED",
+
+        true
+
+    );
+
+
+
+    addEvent(
+
+        "critical",
+
+        "Captain approved AI reroute",
+
+        "Vessel changed course from its current position and is proceeding on the regenerated corridor."
+
+    );
+
+
+    updatePanel();
+
+}
+
+
+
+/* =========================================================
+   REJECT REROUTE
+========================================================= */
+
+function rejectReroute() {
+
+
+    S.hazard =
+        false;
+
+
+    S.paused =
+        false;
+
+
+    $("hazard")
+        .classList
+        .remove("show");
+
+
+
+    setStatus(
+
+        "CURRENT ROUTE RETAINED • RISK ACKNOWLEDGED",
+
+        false
+
+    );
+
+
+    $("routeReason")
+        .textContent =
+
+        "Captain retained the current route. AI continues monitoring the iceberg trajectory.";
+
+
+
+    addEvent(
+
+        "warning",
+
+        "Reroute rejected by captain",
+
+        "Current route retained. Continuous hazard monitoring remains active."
+
+    );
+
+}
+
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+function setStatus(
+    text,
+    normal
 ) {
 
-    return [
 
-        a[0] +
-        (b[0] - a[0]) *
-        t,
+    $("mapStatus")
+        .textContent =
+        text;
 
-        a[1] +
-        (b[1] - a[1]) *
-        t
 
+    const dot =
+        $("statusDot");
+
+
+    dot.style.background =
+
+        normal
+
+            ? "#42e4a6"
+
+            : "#ff5367";
+
+
+    dot.style.boxShadow =
+
+        `0 0 10px ${
+            normal
+                ? "#42e4a6"
+                : "#ff5367"
+        }`;
+
+}
+
+
+
+/* =========================================================
+   UPDATE TELEMETRY PANEL
+========================================================= */
+
+function updatePanel() {
+
+
+    const distance =
+        calculatePathLength(
+            S.path
+        );
+
+
+    const remaining =
+        distance *
+        (1 - S.progress);
+
+
+    const hours =
+        remaining /
+        14.8;
+
+
+
+    $("distance")
+        .textContent =
+
+        `${Math.round(distance).toLocaleString()} km`;
+
+
+
+    $("eta")
+        .textContent =
+
+        hours > 24
+
+            ? `${Math.floor(hours / 24)}d ${Math.round(hours % 24)}h`
+
+            : `${Math.round(hours)}h`;
+
+
+
+    $("fuel")
+        .textContent =
+
+        S.rerouted
+
+            ? "+6.2%"
+
+            : "BASE";
+
+
+
+    $("speed")
+        .textContent =
+
+        S.paused
+
+            ? "0.0 kn"
+
+            : "14.8 kn";
+
+}
+
+
+
+/* =========================================================
+   POINT ALONG ROUTE
+========================================================= */
+
+function pointAlongPath(
+    progress,
+    path
+) {
+
+
+    if (
+        path.length < 2
+    ) {
+
+        return path[0];
+
+    }
+
+
+
+    const segmentDistances =
+
+        path
+            .slice(0, -1)
+            .map(
+
+                (point, index) =>
+
+                    calculateDistance(
+
+                        point,
+
+                        path[index + 1]
+
+                    )
+
+            );
+
+
+
+    let targetDistance =
+
+        segmentDistances.reduce(
+
+            (
+                total,
+                value
+            ) =>
+
+                total + value,
+
+            0
+
+        ) *
+
+        Math.max(
+
+            0,
+
+            Math.min(
+
+                1,
+
+                progress
+
+            )
+
+        );
+
+
+
+    for (
+
+        let i = 0;
+
+        i < segmentDistances.length;
+
+        i++
+
+    ) {
+
+
+        if (
+            targetDistance <=
+            segmentDistances[i]
+        ) {
+
+
+            const ratio =
+
+                targetDistance /
+                segmentDistances[i];
+
+
+            return [
+
+                path[i][0] +
+
+                (
+                    path[i + 1][0] -
+                    path[i][0]
+                ) *
+
+                ratio,
+
+
+                path[i][1] +
+
+                (
+                    path[i + 1][1] -
+                    path[i][1]
+                ) *
+
+                ratio
+
+            ];
+
+        }
+
+
+        targetDistance -=
+            segmentDistances[i];
+
+    }
+
+
+
+    return path[
+        path.length - 1
     ];
 
 }
 
 
+
 /* =========================================================
-   HAVERSINE
+   ROUTE LENGTH
 ========================================================= */
 
-function haversineKm(
+function calculatePathLength(
+    path
+) {
+
+
+    return path
+        .slice(0, -1)
+        .reduce(
+
+            (
+                total,
+                point,
+                index
+            ) =>
+
+                total +
+
+                calculateDistance(
+
+                    point,
+
+                    path[index + 1]
+
+                ),
+
+            0
+
+        );
+
+}
+
+
+
+/* =========================================================
+   HAVERSINE DISTANCE
+========================================================= */
+
+function calculateDistance(
     a,
     b
 ) {
+
 
     const R =
         6371;
 
 
-    const lat1 =
-        toRadians(a[0]);
-
-    const lat2 =
-        toRadians(b[0]);
+    const radians =
+        Math.PI / 180;
 
 
     const dLat =
-        toRadians(
-            b[0] - a[0]
-        );
+        (b[0] - a[0]) *
+        radians;
+
 
     const dLon =
-        toRadians(
-            b[1] - a[1]
-        );
+        (b[1] - a[1]) *
+        radians;
 
 
     const x =
-        Math.sin(dLat / 2) *
-        Math.sin(dLat / 2) +
 
-        Math.cos(lat1) *
-        Math.cos(lat2) *
+        Math.sin(
+            dLat / 2
+        ) ** 2 +
 
-        Math.sin(dLon / 2) *
-        Math.sin(dLon / 2);
+        Math.cos(
+            a[0] * radians
+        ) *
+
+        Math.cos(
+            b[0] * radians
+        ) *
+
+        Math.sin(
+            dLon / 2
+        ) ** 2;
+
 
 
     return (
+
         2 *
+
         R *
+
         Math.asin(
             Math.sqrt(x)
         )
+
     );
 
 }
 
-
-/* =========================================================
-   RADIANS
-========================================================= */
-
-function toRadians(
-    degrees
-) {
-
-    return degrees *
-        Math.PI /
-        180;
-
-}
 
 
 /* =========================================================
@@ -1488,2109 +2144,73 @@ function calculateBearing(
     b
 ) {
 
+
+    const radians =
+        Math.PI / 180;
+
+
     const lat1 =
-        toRadians(a[0]);
+        a[0] *
+        radians;
+
 
     const lat2 =
-        toRadians(b[0]);
+        b[0] *
+        radians;
 
-    const dLon =
-        toRadians(
-            b[1] - a[1]
-        );
+
+    const deltaLon =
+        (
+            b[1] -
+            a[1]
+        ) *
+        radians;
+
 
 
     const y =
-        Math.sin(dLon) *
-        Math.cos(lat2);
+        Math.sin(
+            deltaLon
+        ) *
+        Math.cos(
+            lat2
+        );
 
 
     const x =
+
         Math.cos(lat1) *
-        Math.sin(lat2) -
+        Math.sin(lat2)
+
+        -
 
         Math.sin(lat1) *
         Math.cos(lat2) *
-        Math.cos(dLon);
+        Math.cos(deltaLon);
 
-
-    const bearing =
-        Math.atan2(
-            y,
-            x
-        );
 
 
     return (
-        (bearing *
+
+        (
             180 /
-            Math.PI +
-            360) %
-        360
-    );
-
-}
-
-
-/* =========================================================
-   UPDATE LOCATION TEXT
-========================================================= */
-
-function updateLocationText(
-    position
-) {
-
-    if (!DOM.currentLocation) {
-        return;
-    }
-
-
-    const lat =
-        position[0];
-
-    const lng =
-        position[1];
-
-
-    let location = "Indian Ocean";
-
-
-    if (lat < -50) {
-
-        location =
-            "Southern Ocean";
-
-    }
-
-    else if (lat < -30) {
-
-        location =
-            "South Indian Ocean";
-
-    }
-
-    else if (lat > 5) {
-
-        location =
-            "Indian Ocean";
-
-    }
-
-
-    DOM.currentLocation.textContent =
-        location;
-
-}
-
-
-/* =========================================================
-   UPDATE COORDINATES
-========================================================= */
-
-function updateCoordinates(
-    position
-) {
-
-    if (!DOM.coordinates) {
-        return;
-    }
-
-
-    const lat =
-        Math.abs(
-            position[0]
-        ).toFixed(4);
-
-
-    const lng =
-        Math.abs(
-            position[1]
-        ).toFixed(4);
-
-
-    const latDirection =
-        position[0] >= 0
-            ? "N"
-            : "S";
-
-
-    const lngDirection =
-        position[1] >= 0
-            ? "E"
-            : "W";
-
-
-    DOM.coordinates.textContent =
-        `${lat}° ${latDirection}, ${lng}° ${lngDirection}`;
-
-}
-
-
-/* =========================================================
-   UPDATE VESSEL TELEMETRY
-========================================================= */
-
-function updateVesselTelemetry(
-    position
-) {
-
-    const route =
-        getCurrentRoute();
-
-
-    const nextPoint =
-        getNextRoutePoint(
-            navigationState.voyageProgress
-        );
-
-
-    const bearing =
-        calculateBearing(
-            position,
-            nextPoint
-        );
-
-
-    navigationState.vesselHeading =
-        bearing;
-
-
-    /*
-        Small realistic speed variations.
-    */
-
-    navigationState.vesselSpeed =
-        16.2 +
-        Math.sin(
-            navigationState.simulationTime /
-            7000
-        ) *
-        1.1;
-
-
-    /*
-        Environmental impact.
-    */
-
-    if (
-        navigationState.seaIceConcentration >
-        55
-    ) {
-
-        navigationState.vesselSpeed -=
-            1.5;
-
-    }
-
-
-    if (
-        navigationState.windSpeed >
-        38
-    ) {
-
-        navigationState.vesselSpeed -=
-            1.0;
-
-    }
-
-
-    navigationState.vesselSpeed =
-        Math.max(
-            10,
-            navigationState.vesselSpeed
-        );
-
-
-    /*
-        Fuel slowly decreases.
-    */
-
-    if (
-        navigationState.isRunning &&
-        !navigationState.isPaused
-    ) {
-
-        navigationState.fuel -=
-            0.0014;
-
-    }
-
-
-    navigationState.fuel =
-        Math.max(
-            0,
-            navigationState.fuel
-        );
-
-
-    /*
-        Remaining distance.
-    */
-
-    const totalDistance =
-        routeDistance(
-            route
-        );
-
-
-    navigationState.distanceRemaining =
-        totalDistance *
-        (
-            1 -
-            navigationState.voyageProgress
-        );
-
-
-    /*
-        ETA.
-    */
-
-    const speed =
-        navigationState.vesselSpeed;
-
-
-    navigationState.etaHours =
-        navigationState.distanceRemaining /
-        (
-            speed *
-            1.852
-        );
-
-
-    updateTelemetryDOM();
-
-}
-
-
-/* =========================================================
-   GET NEXT ROUTE POINT
-========================================================= */
-
-function getNextRoutePoint(
-    progress
-) {
-
-    const route =
-        getCurrentRoute();
-
-
-    const index =
-        Math.min(
-
-            route.length - 1,
-
-            Math.floor(
-                progress *
-                (
-                    route.length - 1
-                )
-            ) + 1
-
-        );
-
-
-    return route[index];
-
-}
-
-
-/* =========================================================
-   ROUTE DISTANCE
-========================================================= */
-
-function routeDistance(
-    route
-) {
-
-    let total = 0;
-
-
-    for (
-        let i = 0;
-        i < route.length - 1;
-        i++
-    ) {
-
-        total +=
-            haversineKm(
-                route[i],
-                route[i + 1]
-            );
-
-    }
-
-
-    return total;
-
-}
-
-
-/* =========================================================
-   TELEMETRY DOM
-========================================================= */
-
-function updateTelemetryDOM() {
-
-    if (DOM.vesselSpeed) {
-
-        DOM.vesselSpeed.textContent =
-            `${navigationState.vesselSpeed.toFixed(1)} kn`;
-
-    }
-
-
-    if (DOM.vesselHeading) {
-
-        DOM.vesselHeading.textContent =
-            `${Math.round(
-                navigationState.vesselHeading
-            )}°`;
-
-    }
-
-
-    if (DOM.vesselFuel) {
-
-        DOM.vesselFuel.textContent =
-            `${Math.round(
-                navigationState.fuel
-            )}%`;
-
-    }
-
-
-    if (DOM.vesselProgress) {
-
-        DOM.vesselProgress.textContent =
-            `${Math.round(
-                navigationState.voyageProgress *
-                100
-            )}%`;
-
-    }
-
-
-    if (DOM.vesselProgress) {
-
-        DOM.voyageProgress.style.width =
-            `${navigationState.voyageProgress * 100}%`;
-
-    }
-
-
-    if (DOM.distanceRemaining) {
-
-        DOM.distanceRemaining.textContent =
-            `${Math.round(
-                navigationState.distanceRemaining
-            ).toLocaleString()} km`;
-
-    }
-
-
-    if (DOM.estimatedArrival) {
-
-        DOM.estimatedArrival.textContent =
-            formatETA(
-                navigationState.etaHours
-            );
-
-    }
-
-
-    if (DOM.currentHeading) {
-
-        DOM.currentHeading.textContent =
-            `${Math.round(
-                navigationState.vesselHeading
-            )}°`;
-
-    }
-
-}
-
-
-/* =========================================================
-   ETA FORMAT
-========================================================= */
-
-function formatETA(
-    hours
-) {
-
-    if (
-        !isFinite(hours)
-    ) {
-
-        return "--";
-
-    }
-
-
-    const totalHours =
-        Math.max(
-            0,
-            Math.round(hours)
-        );
-
-
-    const days =
-        Math.floor(
-            totalHours / 24
-        );
-
-
-    const remainingHours =
-        totalHours %
-        24;
-
-
-    if (
-        days === 0
-    ) {
-
-        return `${remainingHours}h`;
-
-    }
-
-
-    return `${days}d ${remainingHours}h`;
-
-}
-
-
-/* =========================================================
-   START VOYAGE
-========================================================= */
-
-function startVoyage() {
-
-    if (
-        navigationState.voyageProgress >=
-        1
-    ) {
-
-        resetVoyage();
-
-    }
-
-
-    navigationState.isRunning =
-        true;
-
-
-    navigationState.isPaused =
-        false;
-
-
-    if (DOM.startButton) {
-
-        DOM.startButton.disabled =
-            true;
-
-        DOM.startButton.style.opacity =
-            "0.45";
-
-    }
-
-
-    if (DOM.pauseButton) {
-
-        DOM.pauseButton.disabled =
-            false;
-
-    }
-
-
-    if (DOM.voyageStatus) {
-
-        DOM.voyageStatus.textContent =
-            "Voyage In Progress";
-
-    }
-
-
-    if (DOM.simulationDot) {
-
-        DOM.simulationDot.classList.add(
-            "active"
-        );
-
-    }
-
-
-    if (DOM.simulationText) {
-
-        DOM.simulationText.textContent =
-            "Live voyage simulation running";
-
-    }
-
-
-    addEvent(
-
-        "normal",
-
-        "Voyage started",
-
-        `Route ${navigationState.selectedRoute} is active. Vessel is proceeding toward Antarctica.`,
-
-        "Now",
-
-        "navigation"
-
-    );
-
-
-    setAIInsight(
-
-        "Voyage monitoring active",
-
-        "The vessel is now moving along the selected route. Environmental, radar and route conditions are being evaluated continuously.",
-
-        "NORMAL",
-
-        "low",
-
-        "On Schedule",
-
-        "Normal"
-
-    );
-
-
-    /*
-        Zoom into vessel after start
-        so the 30 km radar becomes
-        visually meaningful.
-    */
-
-    if (vesselMarker) {
-
-        const position =
-            vesselMarker.getLatLng();
-
-
-        map.flyTo(
-
-            position,
-
-            5.5,
-
-            {
-
-                duration:
-                    1.8
-
-            }
-
-        );
-
-    }
-
-
-    navigationState.lastFrameTime =
-        performance.now();
-
-
-    requestAnimationFrame(
-        animateVoyage
-    );
-
-}
-
-
-/* =========================================================
-   PAUSE VOYAGE
-========================================================= */
-
-function pauseVoyage() {
-
-    if (
-        !navigationState.isRunning
-    ) {
-
-        return;
-
-    }
-
-
-    navigationState.isPaused =
-        !navigationState.isPaused;
-
-
-    if (
-        navigationState.isPaused
-    ) {
-
-        if (DOM.pauseButton) {
-
-            DOM.pauseButton.innerHTML = `
-
-                <i data-lucide="play"></i>
-
-                <span>
-                    Resume
-                </span>
-
-            `;
-
-        }
-
-
-        if (DOM.voyageStatus) {
-
-            DOM.voyageStatus.textContent =
-                "Voyage Paused";
-
-        }
-
-
-        if (DOM.simulationText) {
-
-            DOM.simulationText.textContent =
-                "Voyage simulation paused";
-
-        }
-
-
-        addEvent(
-
-            "warning",
-
-            "Voyage paused",
-
-            "Vessel movement has been paused for simulation review.",
-
-            "Now",
-
-            "pause"
-
-        );
-
-    }
-
-    else {
-
-        if (DOM.pauseButton) {
-
-            DOM.pauseButton.innerHTML = `
-
-                <i data-lucide="pause"></i>
-
-                <span>
-                    Pause
-                </span>
-
-            `;
-
-        }
-
-
-        if (DOM.voyageStatus) {
-
-            DOM.voyageStatus.textContent =
-                "Voyage In Progress";
-
-        }
-
-
-        if (DOM.simulationText) {
-
-            DOM.simulationText.textContent =
-                "Live voyage simulation running";
-
-        }
-
-
-        navigationState.lastFrameTime =
-            performance.now();
-
-
-        requestAnimationFrame(
-            animateVoyage
-        );
-
-    }
-
-
-    refreshIcons();
-
-}
-
-
-/* =========================================================
-   RESET VOYAGE
-========================================================= */
-
-function resetVoyage() {
-
-    navigationState.isRunning =
-        false;
-
-    navigationState.isPaused =
-        false;
-
-    navigationState.voyageProgress =
-        0;
-
-    navigationState.simulationTime =
-        0;
-
-    navigationState.fuel =
-        72;
-
-    navigationState.icebergDetected =
-        false;
-
-    navigationState.icebergAlertActive =
-        false;
-
-    navigationState.icebergTriggered =
-        false;
-
-    navigationState.weatherEventTriggered =
-        false;
-
-    navigationState.seaIceEventTriggered =
-        false;
-
-    navigationState.fuelEventTriggered =
-        false;
-
-    navigationState.routeConflictTriggered =
-        false;
-
-
-    /*
-        Remove iceberg.
-    */
-
-    removeIceberg();
-
-
-    /*
-        Restore environment.
-    */
-
-    navigationState.windSpeed =
-        32;
-
-    navigationState.waveHeight =
-        2.4;
-
-    navigationState.currentSpeed =
-        1.6;
-
-    navigationState.seaIceConcentration =
-        46;
-
-
-    /*
-        Restore vessel position.
-    */
-
-    const start =
-        getCurrentRoute()[0];
-
-
-    updateVesselPosition(
-        start
-    );
-
-
-    updateVesselTelemetry(
-        start
-    );
-
-
-    if (DOM.startButton) {
-
-        DOM.startButton.disabled =
-            false;
-
-        DOM.startButton.style.opacity =
-            "1";
-
-    }
-
-
-    if (DOM.pauseButton) {
-
-        DOM.pauseButton.disabled =
-            true;
-
-        DOM.pauseButton.innerHTML = `
-
-            <i data-lucide="pause"></i>
-
-            <span>
-                Pause
-            </span>
-
-        `;
-
-    }
-
-
-    if (DOM.voyageStatus) {
-
-        DOM.voyageStatus.textContent =
-            "Ready to Start";
-
-    }
-
-
-    if (DOM.simulationDot) {
-
-        DOM.simulationDot.classList.remove(
-            "active"
-        );
-
-    }
-
-
-    if (DOM.simulationText) {
-
-        DOM.simulationText.textContent =
-            "Voyage simulation ready";
-
-    }
-
-
-    setAIInsight(
-
-        "Route Monitoring",
-
-        "Current environmental conditions are being monitored continuously along the selected route.",
-
-        "NORMAL",
-
-        "low",
-
-        "On Schedule",
-
-        "Normal"
-
-    );
-
-
-    if (map) {
-
-        map.fitBounds(
-
-            L.latLngBounds(
-                getCurrentRoute()
-            ),
-
-            {
-                padding:
-                    [35, 35]
-            }
-
-        );
-
-    }
-
-
-    addEvent(
-
-        "normal",
-
-        "Voyage reset",
-
-        "Simulation returned to the initial departure state.",
-
-        "Now",
-
-        "rotate-ccw"
-
-    );
-
-
-    refreshIcons();
-
-}
-
-
-/* =========================================================
-   ANIMATE VOYAGE
-========================================================= */
-
-function animateVoyage(
-    timestamp
-) {
-
-    if (
-        !navigationState.isRunning ||
-        navigationState.isPaused
-    ) {
-
-        return;
-
-    }
-
-
-    if (
-        !navigationState.lastFrameTime
-    ) {
-
-        navigationState.lastFrameTime =
-            timestamp;
-
-    }
-
-
-    const delta =
-        timestamp -
-        navigationState.lastFrameTime;
-
-
-    navigationState.lastFrameTime =
-        timestamp;
-
-
-    /*
-        Simulation speed.
-
-        This is intentionally accelerated
-        for prototype demonstration.
-    */
-
-    const progressPerSecond =
-        1 /
-        120;
-
-
-    navigationState.voyageProgress +=
-        (
-            delta / 1000
-        ) *
-        progressPerSecond;
-
-
-    navigationState.simulationTime +=
-        delta;
-
-
-    /*
-        End of voyage.
-    */
-
-    if (
-        navigationState.voyageProgress >=
-        1
-    ) {
-
-        navigationState.voyageProgress =
-            1;
-
-
-        finishVoyage();
-
-        return;
-
-    }
-
-
-    const position =
-        getPositionOnRoute(
-            navigationState.voyageProgress
-        );
-
-
-    updateVesselPosition(
-        position
-    );
-
-
-    updateVesselTelemetry(
-        position
-    );
-
-
-    updateEnvironmentalSimulation();
-
-
-    checkVoyageEvents();
-
-
-    updateAIClock(
-        delta
-    );
-
-
-    updateIcebergMovement();
-
-
-    /*
-        Follow vessel gently.
-    */
-
-    if (
-        navigationState.voyageProgress >
-            0.03 &&
-        navigationState.voyageProgress <
-            0.98
-    ) {
-
-        const currentCenter =
-            map.getCenter();
-
-
-        const distanceToCenter =
-            haversineKm(
-
-                [
-                    currentCenter.lat,
-                    currentCenter.lng
-                ],
-
-                position
-
-            );
-
-
-        if (
-            distanceToCenter >
-            80
-        ) {
-
-            map.panTo(
-                position,
-                {
-                    animate:
-                        true,
-
-                    duration:
-                        0.7
-
-                }
-            );
-
-        }
-
-    }
-
-
-    navigationState.animationFrame =
-        requestAnimationFrame(
-            animateVoyage
-        );
-
-}
-
-
-/* =========================================================
-   FINISH VOYAGE
-========================================================= */
-
-function finishVoyage() {
-
-    navigationState.isRunning =
-        false;
-
-    navigationState.isPaused =
-        false;
-
-
-    if (DOM.voyageStatus) {
-
-        DOM.voyageStatus.textContent =
-            "Arrived at Antarctica";
-
-    }
-
-
-    if (DOM.simulationDot) {
-
-        DOM.simulationDot.classList.add(
-            "active"
-        );
-
-    }
-
-
-    if (DOM.simulationText) {
-
-        DOM.simulationText.textContent =
-            "Voyage completed";
-
-    }
-
-
-    if (DOM.startButton) {
-
-        DOM.startButton.disabled =
-            false;
-
-        DOM.startButton.style.opacity =
-            "1";
-
-    }
-
-
-    if (DOM.pauseButton) {
-
-        DOM.pauseButton.disabled =
-            true;
-
-    }
-
-
-    setAIInsight(
-
-        "Voyage completed",
-
-        "The vessel has reached the Antarctic destination. Final route, fuel and environmental conditions can now be reviewed.",
-
-        "NORMAL",
-
-        "low",
-
-        "Arrived",
-
-        `${Math.round(
-            navigationState.fuel
-        )}% remaining`
-
-    );
-
-
-    addEvent(
-
-        "normal",
-
-        "Antarctic destination reached",
-
-        "Vessel has completed the selected voyage route.",
-
-        "Completed",
-
-        "flag"
-
-    );
-
-
-    refreshIcons();
-
-}
-
-
-/* =========================================================
-   ENVIRONMENT SIMULATION
-========================================================= */
-
-function updateEnvironmentalSimulation() {
-
-    /*
-        Small changes only.
-    */
-
-    navigationState.windSpeed +=
-        (
-            Math.random() -
-            0.5
-        ) *
-        0.18;
-
-
-    navigationState.windSpeed =
-        clamp(
-            navigationState.windSpeed,
-            26,
-            44
-        );
-
-
-    navigationState.waveHeight +=
-        (
-            Math.random() -
-            0.5
-        ) *
-        0.025;
-
-
-    navigationState.waveHeight =
-        clamp(
-            navigationState.waveHeight,
-            1.8,
-            4.2
-        );
-
-
-    navigationState.currentSpeed +=
-        (
-            Math.random() -
-            0.5
-        ) *
-        0.015;
-
-
-    navigationState.currentSpeed =
-        clamp(
-            navigationState.currentSpeed,
-            1.0,
-            2.4
-        );
-
-
-    /*
-        Sea ice gradually becomes
-        more important as the vessel
-        approaches Antarctica.
-    */
-
-    if (
-        navigationState.voyageProgress >
-        0.48
-    ) {
-
-        navigationState.seaIceConcentration +=
-            0.002;
-
-    }
-
-
-    navigationState.seaIceConcentration =
-        clamp(
-            navigationState.seaIceConcentration,
-            42,
-            68
-        );
-
-}
-
-
-/* =========================================================
-   CHECK VOYAGE EVENTS
-========================================================= */
-
-function checkVoyageEvents() {
-
-    const progress =
-        navigationState.voyageProgress;
-
-
-    /*
-        WEATHER EVENT
-    */
-
-    if (
-        progress > 0.20 &&
-        !navigationState.weatherEventTriggered
-    ) {
-
-        navigationState.weatherEventTriggered =
-            true;
-
-
-        navigationState.windSpeed =
-            37;
-
-
-        navigationState.aiEtaImpact +=
-            1;
-
-
-        setAIInsight(
-
-            "Weather conditions changing",
-
-            "Headwinds are increasing along the selected route. Vessel speed may temporarily reduce as the system enters the changing weather zone.",
-
-            "ATTENTION",
-
-            "moderate",
-
-            "+1 hr",
-
-            "+2%"
-
-        );
-
-
-        addEvent(
-
-            "warning",
-
-            "Wind conditions changed",
-
-            "Headwind intensity increased along the selected route.",
-
-            "Now",
-
-            "wind"
-
-        );
-
-    }
-
-
-    /*
-        SEA ICE EVENT
-    */
-
-    if (
-        progress > 0.38 &&
-        !navigationState.seaIceEventTriggered
-    ) {
-
-        navigationState.seaIceEventTriggered =
-            true;
-
-
-        navigationState.seaIceConcentration =
-            53;
-
-
-        setAIInsight(
-
-            "Sea-ice concentration increasing",
-
-            "Sea-ice concentration ahead of the vessel is increasing. The AI predicts moderate additional resistance over the next several hours.",
-
-            "ATTENTION",
-
-            "moderate",
-
-            "+1.5 hrs",
-
-            "+3%"
-
-        );
-
-
-        addEvent(
-
-            "warning",
-
-            "Sea-ice increase detected",
-
-            "Higher sea-ice concentration is predicted ahead of Route B.",
-
-            "Now",
-
-            "snowflake"
-
-        );
-
-    }
-
-
-    /*
-        ICEBERG EVENT
-    */
-
-    if (
-        progress > 0.49 &&
-        !navigationState.icebergTriggered
-    ) {
-
-        navigationState.icebergTriggered =
-            true;
-
-
-        spawnIceberg();
-
-
-    }
-
-
-    /*
-        FUEL EVENT
-    */
-
-    if (
-        progress > 0.62 &&
-        !navigationState.fuelEventTriggered
-    ) {
-
-        navigationState.fuelEventTriggered =
-            true;
-
-
-        navigationState.aiFuelImpact =
-            4;
-
-
-        setAIInsight(
-
-            "Fuel forecast updated",
-
-            "Environmental resistance is increasing fuel demand. Current reserves remain within the operational safety range.",
-
-            "UPDATE",
-
-            "moderate",
-
-            "+2 hrs",
-
-            "+4%"
-
-        );
-
-
-        addEvent(
-
-            "warning",
-
-            "Fuel forecast updated",
-
-            "Predicted fuel consumption increased due to environmental resistance.",
-
-            "Now",
-
-            "fuel"
-
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   SPAWN ICEBERG
-========================================================= */
-
-function spawnIceberg() {
-
-    if (!map || !vesselMarker) {
-        return;
-    }
-
-
-    const vesselPosition =
-        vesselMarker.getLatLng();
-
-
-    const route =
-        getCurrentRoute();
-
-
-    const nextPoint =
-        getNextRoutePoint(
-            navigationState.voyageProgress
-        );
-
-
-    const bearing =
-        calculateBearing(
-
-            [
-                vesselPosition.lat,
-                vesselPosition.lng
-            ],
-
-            nextPoint
-
-        );
-
-
-    /*
-        Put iceberg initially
-        approximately 38 km ahead.
-    */
-
-    const icebergPosition =
-        destinationPoint(
-
-            [
-                vesselPosition.lat,
-                vesselPosition.lng
-            ],
-
-            bearing,
-
-            38
-
-        );
-
-
-    navigationState.icebergDistance =
-        38;
-
-
-    icebergMarker =
-        createIcebergMarker(
-            icebergPosition
-        );
-
-
-    /*
-        Predicted trajectory toward
-        the selected route.
-    */
-
-    const trailStart =
-        icebergPosition;
-
-
-    const trailEnd =
-        getPositionOnRoute(
-
-            Math.min(
-                1,
-                navigationState.voyageProgress +
-                0.07
+            Math.PI *
+
+            Math.atan2(
+                y,
+                x
             )
 
-        );
+            +
 
+            360
 
-    icebergTrail =
-        L.polyline(
-
-            [
-
-                trailStart,
-
-                [
-
-                    (
-                        trailStart[0] +
-                        trailEnd[0]
-                    ) / 2,
-
-                    (
-                        trailStart[1] +
-                        trailEnd[1]
-                    ) / 2
-
-                ],
-
-                trailEnd
-
-            ],
-
-            {
-
-                className:
-                    "iceberg-trail",
-
-                color:
-                    "#ff5e6c",
-
-                weight:
-                    2,
-
-                dashArray:
-                    "5 6",
-
-                opacity:
-                    0.75
-
-            }
-
-        ).addTo(map);
-
-
-    addEvent(
-
-        "danger",
-
-        "Iceberg detected",
-
-        "A moving iceberg has entered the predicted approach corridor ahead of the vessel.",
-
-        "Now",
-
-        "triangle-alert"
-
-    );
-
-
-    setAIInsight(
-
-        "Potential iceberg route conflict",
-
-        "An iceberg detected approximately 38 km ahead is moving toward the selected route. Wind and current conditions indicate a possible route intersection within the next few hours.",
-
-        "HIGH PRIORITY",
-
-        "high",
-
-        "+2.5 hrs",
-
-        "+4%"
-
-    );
-
-
-    navigationState.icebergDetected =
-        true;
-
-
-    navigationState.icebergAlertActive =
-        true;
-
-
-    /*
-        Zoom in so the detection
-        is clearly visible.
-    */
-
-    map.flyTo(
-
-        vesselPosition,
-
-        6.2,
-
-        {
-
-            duration:
-                1.4
-
-        }
+        ) % 360
 
     );
 
 }
 
-
-/* =========================================================
-   CREATE ICEBERG MARKER
-========================================================= */
-
-function createIcebergMarker(
-    position
-) {
-
-    const icon =
-        L.divIcon({
-
-            className:
-                "custom-iceberg-icon",
-
-            html: `
-
-                <div class="iceberg-marker">
-
-                    <div class="iceberg-pulse"></div>
-
-                    <div class="iceberg-symbol"></div>
-
-                </div>
-
-            `,
-
-            iconSize:
-                [34, 34],
-
-            iconAnchor:
-                [17, 17]
-
-        });
-
-
-    const marker =
-        L.marker(
-
-            position,
-
-            {
-
-                icon,
-
-                zIndexOffset:
-                    900
-
-            }
-
-        ).addTo(map);
-
-
-    marker.bindTooltip(
-
-        "Iceberg detected • Monitoring movement",
-
-        {
-
-            direction: "top"
-
-        }
-
-    );
-
-
-    marker.on(
-        "click",
-        () => {
-
-            showIcebergInsight();
-
-        }
-    );
-
-
-    return marker;
-
-}
-
-
-/* =========================================================
-   UPDATE ICEBERG MOVEMENT
-========================================================= */
-
-function updateIcebergMovement() {
-
-    if (
-        !icebergMarker ||
-        !navigationState.icebergDetected
-    ) {
-
-        return;
-
-    }
-
-
-    /*
-        Move iceberg gradually toward
-        a future route intersection.
-
-        This is a prototype simulation.
-    */
-
-    const current =
-        icebergMarker.getLatLng();
-
-
-    const target =
-        getPositionOnRoute(
-
-            Math.min(
-
-                1,
-
-                navigationState.voyageProgress +
-                0.045
-
-            )
-
-        );
-
-
-    const targetPoint = {
-
-        lat:
-            target[0],
-
-        lng:
-            target[1]
-
-    };
-
-
-    const factor =
-        0.0018;
-
-
-    const newPosition = [
-
-        current.lat +
-        (
-            targetPoint.lat -
-            current.lat
-        ) *
-        factor,
-
-        current.lng +
-        (
-            targetPoint.lng -
-            current.lng
-        ) *
-        factor
-
-    ];
-
-
-    icebergMarker.setLatLng(
-        newPosition
-    );
-
-
-    /*
-        Update trail.
-    */
-
-    if (icebergTrail) {
-
-        const routeTarget =
-            getPositionOnRoute(
-
-                Math.min(
-
-                    1,
-
-                    navigationState.voyageProgress +
-                    0.055
-
-                )
-
-            );
-
-
-        icebergTrail.setLatLngs(
-
-            [
-
-                [
-                    newPosition[0],
-                    newPosition[1]
-                ],
-
-                [
-
-                    (
-                        newPosition[0] +
-                        routeTarget[0]
-                    ) / 2,
-
-                    (
-                        newPosition[1] +
-                        routeTarget[1]
-                    ) / 2
-
-                ],
-
-                routeTarget
-
-            ]
-
-        );
-
-    }
-
-
-    /*
-        Distance from vessel.
-    */
-
-    const vessel =
-        vesselMarker.getLatLng();
-
-
-    const distance =
-        haversineKm(
-
-            [
-                vessel.lat,
-                vessel.lng
-            ],
-
-            newPosition
-
-        );
-
-
-    navigationState.icebergDistance =
-        distance;
-
-
-    /*
-        Entered radar.
-    */
-
-    if (
-        distance <=
-        navigationState.radarRadiusKm &&
-        !navigationState.icebergAlertActive
-    ) {
-
-        triggerRadarDetection(
-            distance
-        );
-
-    }
-
-
-    /*
-        Critical route conflict.
-    */
-
-    if (
-        distance <= 18 &&
-        !navigationState.routeConflictTriggered
-    ) {
-
-        navigationState.routeConflictTriggered =
-            true;
-
-
-        const icebergElement =
-            document.querySelector(
-                ".iceberg-marker"
-            );
-
-
-        if (icebergElement) {
-
-            icebergElement.classList.add(
-                "danger"
-            );
-
-        }
-
-
-        setAIInsight(
-
-            "Critical iceberg warning",
-
-            "The detected iceberg is now inside the 30 km radar range and its projected movement may intersect the current route. Alternative route evaluation is recommended.",
-
-            "CRITICAL",
-
-            "high",
-
-            "+3 hrs",
-
-            "+6%"
-
-        );
-
-
-        addEvent(
-
-            "danger",
-
-            "Potential route conflict",
-
-            "Iceberg trajectory is approaching the selected route corridor.",
-
-            "Now",
-
-            "triangle-alert"
-
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   RADAR DETECTION
-========================================================= */
-
-function triggerRadarDetection(
-    distance
-) {
-
-    navigationState.icebergAlertActive =
-        true;
-
-
-    const icebergElement =
-        document.querySelector(
-            ".iceberg-marker"
-        );
-
-
-    if (icebergElement) {
-
-        icebergElement.classList.add(
-            "danger"
-        );
-
-    }
-
-
-    setAIInsight(
-
-        "Iceberg detected within radar range",
-
-        `The vessel radar has detected a moving iceberg approximately ${distance.toFixed(1)} km away. AI analysis indicates that its projected movement may bring it closer to Route ${navigationState.selectedRoute}.`,
-
-        "HIGH PRIORITY",
-
-        "high",
-
-        "+2.5 hrs",
-
-        "+4%"
-
-    );
-
-
-    addEvent(
-
-        "danger",
-
-        "Radar detection confirmed",
-
-        `Iceberg detected at ${distance.toFixed(1)} km from vessel.`,
-
-        "Now",
-
-        "radio"
-
-    );
-
-}
-
-
-/* =========================================================
-   ICEBERG INSIGHT
-========================================================= */
-
-function showIcebergInsight() {
-
-    const distance =
-        navigationState.icebergDistance
-            ? navigationState.icebergDistance.toFixed(1)
-            : "--";
-
-
-    setAIInsight(
-
-        "Iceberg movement analysis",
-
-        `The iceberg is currently ${distance} km from the vessel. Current and wind conditions indicate continued movement toward the projected route corridor.`,
-
-        "HIGH PRIORITY",
-
-        "high",
-
-        "+3 hrs",
-
-        "+5%"
-
-    );
-
-}
-
-
-/* =========================================================
-   REMOVE ICEBERG
-========================================================= */
-
-function removeIceberg() {
-
-    if (icebergMarker) {
-
-        map.removeLayer(
-            icebergMarker
-        );
-
-        icebergMarker =
-            null;
-
-    }
-
-
-    if (icebergTrail) {
-
-        map.removeLayer(
-            icebergTrail
-        );
-
-        icebergTrail =
-            null;
-
-    }
-
-}
 
 
 /* =========================================================
@@ -3599,675 +2219,145 @@ function removeIceberg() {
 
 function destinationPoint(
     start,
-    bearingDegrees,
-    distanceKm
+    bearing,
+    distance
 ) {
+
 
     const R =
         6371;
 
 
-    const bearing =
-        toRadians(
-            bearingDegrees
-        );
+    const radians =
+        Math.PI / 180;
+
+
+    const bearingRad =
+        bearing *
+        radians;
 
 
     const lat1 =
-        toRadians(
-            start[0]
-        );
+        start[0] *
+        radians;
+
 
     const lon1 =
-        toRadians(
-            start[1]
-        );
+        start[1] *
+        radians;
 
 
     const angularDistance =
-        distanceKm /
+        distance /
         R;
 
 
+
     const lat2 =
+
         Math.asin(
 
             Math.sin(lat1) *
-            Math.cos(angularDistance) +
+            Math.cos(
+                angularDistance
+            )
+
+            +
 
             Math.cos(lat1) *
-            Math.sin(angularDistance) *
-            Math.cos(bearing)
+            Math.sin(
+                angularDistance
+            ) *
+            Math.cos(
+                bearingRad
+            )
 
         );
 
 
+
     const lon2 =
+
         lon1 +
 
         Math.atan2(
 
-            Math.sin(bearing) *
-            Math.sin(angularDistance) *
+            Math.sin(
+                bearingRad
+            ) *
+
+            Math.sin(
+                angularDistance
+            ) *
+
             Math.cos(lat1),
 
-            Math.cos(angularDistance) -
+            Math.cos(
+                angularDistance
+            )
+
+            -
+
             Math.sin(lat1) *
             Math.sin(lat2)
 
         );
 
 
+
     return [
 
-        lat2 *
-        180 /
-        Math.PI,
+        lat2 / radians,
 
-        (
-            lon2 *
-            180 /
-            Math.PI +
-            540
-        ) %
-        360 -
-        180
+        lon2 / radians
 
     ];
 
 }
 
 
-/* =========================================================
-   AI CLOCK
-========================================================= */
-
-function updateAIClock(
-    delta
-) {
-
-    navigationState.aiNextUpdate -=
-        delta / 1000;
-
-
-    if (
-        navigationState.aiNextUpdate <=
-        0
-    ) {
-
-        navigationState.aiNextUpdate =
-            45;
-
-
-        runPeriodicAIAnalysis();
-
-    }
-
-
-    if (DOM.nextAIUpdate) {
-
-        DOM.nextAIUpdate.textContent =
-            `00:${Math.max(
-                0,
-                Math.ceil(
-                    navigationState.aiNextUpdate
-                )
-            )
-                .toString()
-                .padStart(2, "0")}`;
-
-    }
-
-}
-
 
 /* =========================================================
-   PERIODIC AI ANALYSIS
+   EVENT FEED
 ========================================================= */
 
-function runPeriodicAIAnalysis() {
-
-    if (
-        !navigationState.isRunning
-    ) {
-
-        return;
-
-    }
-
-
-    const progress =
-        navigationState.voyageProgress;
-
-
-    /*
-        Highest priority first.
-    */
-
-    if (
-        navigationState.icebergDetected &&
-        navigationState.icebergDistance !== null
-    ) {
-
-        const distance =
-            navigationState.icebergDistance;
-
-
-        if (
-            distance <= 18
-        ) {
-
-            setAIInsight(
-
-                "Critical route conflict",
-
-                "The detected iceberg is approaching the selected route corridor. AI analysis indicates that the current route may require reassessment.",
-
-                "CRITICAL",
-
-                "high",
-
-                "+3 hrs",
-
-                "+6%"
-
-            );
-
-            return;
-
-        }
-
-
-        if (
-            distance <= 30
-        ) {
-
-            setAIInsight(
-
-                "Iceberg remains within radar range",
-
-                `The moving iceberg remains ${distance.toFixed(1)} km from the vessel. Its predicted trajectory continues toward the route corridor.`,
-
-                "HIGH PRIORITY",
-
-                "high",
-
-                "+2.5 hrs",
-
-                "+4%"
-
-            );
-
-            return;
-
-        }
-
-    }
-
-
-    /*
-        Sea ice.
-    */
-
-    if (
-        navigationState.seaIceConcentration >
-        52
-    ) {
-
-        setAIInsight(
-
-            "Sea-ice conditions changing",
-
-            `Sea-ice concentration ahead is approximately ${Math.round(navigationState.seaIceConcentration)}%. AI analysis predicts increased resistance as the vessel approaches the Antarctic sector.`,
-
-            "ATTENTION",
-
-            "moderate",
-
-            "+1.5 hrs",
-
-            "+3%"
-
-        );
-
-        return;
-
-    }
-
-
-    /*
-        Weather.
-    */
-
-    if (
-        navigationState.windSpeed >
-        35
-    ) {
-
-        setAIInsight(
-
-            "Weather impact detected",
-
-            `Wind speed has increased to approximately ${Math.round(navigationState.windSpeed)} knots. Headwind conditions may reduce vessel speed along the selected route.`,
-
-            "UPDATE",
-
-            "moderate",
-
-            "+1 hr",
-
-            "+2%"
-
-        );
-
-        return;
-
-    }
-
-
-    /*
-        Fuel.
-    */
-
-    if (
-        navigationState.fuel <
-        60
-    ) {
-
-        setAIInsight(
-
-            "Fuel forecast updated",
-
-            "Environmental resistance is increasing projected fuel consumption. Current reserve remains under continuous monitoring.",
-
-            "UPDATE",
-
-            "moderate",
-
-            "+1 hr",
-
-            "+3%"
-
-        );
-
-        return;
-
-    }
-
-
-    /*
-        Normal insight.
-    */
-
-    setAIInsight(
-
-        "Route conditions stable",
-
-        `Route ${navigationState.selectedRoute} remains within the current operational envelope. Vessel position, environment and radar conditions continue to be monitored.`,
-
-        "NORMAL",
-
-        "low",
-
-        "On Schedule",
-
-        "Normal"
-
-    );
-
-}
-
-
-/* =========================================================
-   SET AI INSIGHT
-========================================================= */
-
-function setAIInsight(
+function addEvent(
+    type,
     title,
-    message,
-    priority,
-    risk,
-    eta,
-    fuel
+    message
 ) {
 
-    if (DOM.aiTitle) {
 
-        DOM.aiTitle.textContent =
-            title;
-
-    }
+    const feed =
+        $("eventFeed");
 
 
-    if (DOM.aiMessage) {
-
-        DOM.aiMessage.textContent =
-            message;
-
-    }
-
-
-    if (DOM.aiPriority) {
-
-        DOM.aiPriority.textContent =
-            priority;
-
-
-        DOM.aiPriority.classList.remove(
-            "warning",
-            "danger"
+    const event =
+        document.createElement(
+            "article"
         );
 
 
-        if (
-            risk === "moderate"
-        ) {
-
-            DOM.aiPriority.classList.add(
-                "warning"
-            );
-
-        }
-
-
-        if (
-            risk === "high"
-        ) {
-
-            DOM.aiPriority.classList.add(
-                "danger"
-            );
-
-        }
-
-    }
-
-
-    if (DOM.aiRisk) {
-
-        DOM.aiRisk.textContent =
-            capitalize(
-                risk
-            );
-
-
-        DOM.aiRisk.className =
-            "risk-" +
-            risk;
-
-    }
-
-
-    if (DOM.aiEta) {
-
-        DOM.aiEta.textContent =
-            eta;
-
-    }
-
-
-    if (DOM.aiFuel) {
-
-        DOM.aiFuel.textContent =
-            fuel;
-
-    }
-
-
-    if (DOM.aiMessage) {
-
-        DOM.aiMessage.classList.remove(
-            "ai-map-event"
-        );
-
-
-        void DOM.aiMessage.offsetWidth;
-
-
-        DOM.aiMessage.classList.add(
-            "ai-map-event"
-        );
-
-    }
-
-
-    navigationState.aiRisk =
-        risk;
-
-
-    navigationState.aiPriority =
-        priority;
-
-}
-
-
-/* =========================================================
-   SELECT ROUTE
-========================================================= */
-
-function selectRoute(
-    routeName,
-    userSelected = false
-) {
-
-    if (
-        !routes[routeName]
-    ) {
-
-        return;
-
-    }
-
-
-    navigationState.selectedRoute =
-        routeName;
-
-
-    /*
-        Update route styling.
-    */
-
-    Object.keys(
-        routeLayers
-    ).forEach(
-        name => {
-
-            const layer =
-                routeLayers[name];
-
-
-            if (
-                name === routeName
-            ) {
-
-                layer.setStyle({
-
-                    color:
-                        "#63caff",
-
-                    weight:
-                        4,
-
-                    opacity:
-                        0.92,
-
-                    dashArray:
-                        null
-
-                });
-
-            }
-
-            else {
-
-                layer.setStyle({
-
-                    color:
-                        "#9db6c6",
-
-                    weight:
-                        2,
-
-                    opacity:
-                        0.42,
-
-                    dashArray:
-                        "8 7"
-
-                });
-
-            }
-
-        }
-    );
-
-
-    selectedRouteLayer =
-        routeLayers[
-            routeName
-        ];
-
-
-    /*
-        Update route option UI.
-    */
-
-    document.querySelectorAll(
-        ".route-option"
-    ).forEach(
-        option => {
-
-            option.classList.toggle(
-
-                "selected",
-
-                option.dataset.route ===
-                routeName
-
-            );
-
-        }
-    );
-
-
-    updateRouteAI(
-        routeName
-    );
-
-
-    /*
-        If voyage has not started,
-        move vessel to new route start.
-    */
-
-    if (
-        !navigationState.isRunning
-    ) {
-
-        const start =
-            routes[routeName][0];
-
-
-        updateVesselPosition(
-            start
-        );
-
-    }
-
-
-    if (userSelected) {
-
-        addEvent(
-
-            "normal",
-
-            `Route ${routeName} selected`,
-
-            `Navigation route ${routeName} is now active for the prototype.`,
-
-            "Now",
-
-            "route"
-
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   ROUTE AI
-========================================================= */
-
-function updateRouteAI(
-    routeName
-) {
-
-    if (!DOM.routeAI) {
-        return;
-    }
-
-
-    const info =
-        routeInfo[routeName];
-
-
-    if (!info) {
-        return;
-    }
-
-
-    let message = "";
-
-
-    if (
-        routeName === "B"
-    ) {
-
-        message =
-            "Route B is approximately 30 km longer than Route A, but current environmental forecasts indicate lower sea-ice concentration, lower iceberg exposure and improved fuel efficiency. AI therefore selected Route B for the initial voyage.";
-
-    }
-
-    else if (
-        routeName === "A"
-    ) {
-
-        message =
-            "Route A provides a shorter distance, but current environmental forecasts indicate higher sea-ice and iceberg exposure. This may increase resistance and fuel demand.";
-
-    }
-
-    else if (
-        routeName === "C"
-    ) {
-
-        message =
-            "Route C provides lower predicted ice exposure, but requires additional distance. The lower environmental risk is balanced against increased voyage time.";
-
-    }
-
-    else {
-
-        message =
-            "Route D provides another operational alternative, but current forecasts indicate higher fuel requirements compared with Route B.";
-
-    }
-
-
-    DOM.routeAI.innerHTML = `
-
-        <div class="route-ai-title">
-
-            <i data-lucide="sparkles"></i>
-
-            <strong>
-                Why Route ${routeName}?
-            </strong>
-
-        </div>
-
+    event.className =
+        `event ${type}`;
+
+
+    event.innerHTML = `
+
+        <strong>
+            ${title}
+        </strong>
+
+        <time>
+            ${new Date()
+                .toLocaleTimeString(
+                    [],
+                    {
+                        hour: "2-digit",
+                        minute: "2-digit"
+                    }
+                )}
+        </time>
 
         <p>
             ${message}
@@ -4276,849 +2366,208 @@ function updateRouteAI(
     `;
 
 
-    refreshIcons();
-
-}
-
-
-/* =========================================================
-   GENERATE ROUTES
-========================================================= */
-
-function generateRoutes() {
-
-    setTimeout(
-        () => {
-
-            Object.keys(
-                routes
-            ).forEach(
-                routeName => {
-
-                    if (
-                        !routeLayers[routeName]
-                    ) {
-                        return;
-                    }
-
-
-                    routeLayers[
-                        routeName
-                    ].setStyle({
-
-                        opacity:
-                            routeName ===
-                            navigationState.selectedRoute
-                                ? 0.92
-                                : 0.42
-
-                    });
-
-                }
-            );
-
-
-            selectRoute(
-                "B",
-                false
-            );
-
-
-            setAIInsight(
-
-                "Route B selected by AI",
-
-                "Four candidate routes were evaluated. Route B provides a balanced combination of distance, sea-ice exposure, iceberg risk and expected fuel consumption.",
-
-                "ROUTE DECISION",
-
-                "low",
-
-                "+2 hrs",
-
-                "+4%"
-
-            );
-
-
-            addEvent(
-
-                "normal",
-
-                "Routes generated",
-
-                "Routes A, B, C and D evaluated. Route B remains the AI-selected route.",
-
-                "Now",
-
-                "route"
-
-            );
-
-        },
-
-        700
-    );
-
-}
-
-
-/* =========================================================
-   LAYER CONTROLS
-========================================================= */
-
-function initializeLayerControls() {
-
-    const buttons =
-        document.querySelectorAll(
-            ".layer-button"
-        );
-
-
-    buttons.forEach(
-        button => {
-
-            button.addEventListener(
-                "click",
-                () => {
-
-                    const layer =
-                        button.dataset.layer;
-
-
-                    button.classList.toggle(
-                        "active"
-                    );
-
-
-                    toggleLayer(
-                        layer,
-                        button.classList.contains(
-                            "active"
-                        )
-                    );
-
-                }
-            );
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   TOGGLE LAYER
-========================================================= */
-
-function toggleLayer(
-    layer,
-    active
-) {
-
-    if (!map) {
-        return;
-    }
-
-
-    if (
-        layer === "route"
-    ) {
-
-        Object.values(
-            routeLayers
-        ).forEach(
-            routeLayer => {
-
-                if (active) {
-
-                    if (
-                        !map.hasLayer(
-                            routeLayer
-                        )
-                    ) {
-
-                        routeLayer.addTo(
-                            map
-                        );
-
-                    }
-
-                }
-
-                else {
-
-                    if (
-                        map.hasLayer(
-                            routeLayer
-                        )
-                    ) {
-
-                        map.removeLayer(
-                            routeLayer
-                        );
-
-                    }
-
-                }
-
-            }
-        );
-
-    }
-
-
-    if (
-        layer === "radar"
-    ) {
-
-        if (active) {
-
-            if (radarCircle) {
-
-                radarCircle.addTo(
-                    map
-                );
-
-            }
-
-
-            if (radarVisual) {
-
-                radarVisual.addTo(
-                    map
-                );
-
-            }
-
-        }
-
-        else {
-
-            if (radarCircle) {
-
-                map.removeLayer(
-                    radarCircle
-                );
-
-            }
-
-
-            if (radarVisual) {
-
-                map.removeLayer(
-                    radarVisual
-                );
-
-            }
-
-        }
-
-    }
-
-
-    if (
-        layer === "ice"
-    ) {
-
-        if (seaIceLayer) {
-
-            if (active) {
-
-                seaIceLayer.addTo(
-                    map
-                );
-
-            }
-
-            else {
-
-                map.removeLayer(
-                    seaIceLayer
-                );
-
-            }
-
-        }
-
-    }
-
-
-    /*
-        Weather and ocean are currently
-        represented through the AI/environment
-        layer. Their dedicated visual
-        overlays will be added when the
-        real data layer is connected.
-    */
-
-    if (
-        layer === "weather"
-    ) {
-
-        showLayerMessage(
-            active
-                ? "Weather monitoring enabled"
-                : "Weather layer hidden"
-        );
-
-    }
-
-
-    if (
-        layer === "ocean"
-    ) {
-
-        showLayerMessage(
-            active
-                ? "Ocean current monitoring enabled"
-                : "Ocean layer hidden"
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   CENTER VESSEL
-========================================================= */
-
-function centerVessel() {
-
-    if (
-        !map ||
-        !vesselMarker
-    ) {
-
-        return;
-
-    }
-
-
-    const position =
-        vesselMarker.getLatLng();
-
-
-    map.flyTo(
-
-        position,
-
-        Math.max(
-            map.getZoom(),
-            6
-        ),
-
-        {
-
-            duration:
-                1.2
-
-        }
-
-    );
-
-}
-
-
-/* =========================================================
-   ADD EVENT
-========================================================= */
-
-function addEvent(
-    type,
-    title,
-    message,
-    time,
-    icon
-) {
-
-    if (!DOM.eventFeed) {
-        return;
-    }
-
-
-    const event =
-        document.createElement(
-            "div"
-        );
-
-
-    event.className =
-        `event-item ${type}`;
-
-
-    event.innerHTML = `
-
-        <div class="event-icon">
-
-            <i data-lucide="${icon}"></i>
-
-        </div>
-
-
-        <div class="event-content">
-
-            <strong>
-                ${title}
-            </strong>
-
-            <span>
-                ${message}
-            </span>
-
-        </div>
-
-
-        <time>
-            ${time}
-        </time>
-
-    `;
-
-
-    DOM.eventFeed.prepend(
+    feed.prepend(
         event
     );
 
 
-    /*
-        Keep feed clean.
-    */
-
     while (
-        DOM.eventFeed.children.length >
-        6
+        feed.children.length > 4
     ) {
 
-        DOM.eventFeed.lastElementChild
+        feed.lastElementChild
             .remove();
 
     }
 
-
-    refreshIcons();
-
 }
 
 
+
 /* =========================================================
-   SHOW LAYER MESSAGE
+   LAYER CONTROL
 ========================================================= */
 
-function showLayerMessage(
-    message
+function toggleLayer(
+    name,
+    enabled
 ) {
 
-    addEvent(
 
-        "normal",
+    const groups = {
 
-        "Layer update",
+        route: [
 
-        message,
+            ...Object.values(
+                routeLayers
+            ),
 
-        "Now",
+            pendingLayer
 
-        "layers"
-
-    );
-
-}
+        ].filter(Boolean),
 
 
-/* =========================================================
-   MAP ERROR
-========================================================= */
+        iceberg: [
 
-function showMapError(
-    message
-) {
+            ...icebergLayers.flatMap(layer => [
+                layer.marker,
+                layer.trail,
+                layer.forecast
+            ])
 
-    if (!DOM.map) {
-        return;
-    }
+        ],
 
 
-    DOM.map.innerHTML = `
+        ice: [
 
-        <div
-            style="
-                position:absolute;
-                inset:0;
-                display:flex;
-                align-items:center;
-                justify-content:center;
-                padding:30px;
-                text-align:center;
-                background:#071522;
-                color:#a9bfd1;
-                font-size:12px;
-                z-index:1000;
-            "
-        >
+            iceLayer
 
-            ${message}
-
-        </div>
-
-    `;
-
-}
+        ],
 
 
-/* =========================================================
-   LAST UPDATED
-========================================================= */
+        current: [
 
-function updateLastUpdated() {
+            currentLayer
 
-    if (!DOM.lastUpdated) {
-        return;
-    }
+        ],
 
 
-    const now =
-        new Date();
+        risk: [
+
+            riskLayer
+
+        ],
+
+        radar: [
+
+            radarLayer
+
+        ]
+
+    };
 
 
-    DOM.lastUpdated.textContent =
-        now.toLocaleTimeString(
-            [],
-            {
-                hour:
-                    "2-digit",
+    const layers =
+        groups[name] ||
+        [];
 
-                minute:
-                    "2-digit"
+
+    layers.forEach(
+
+        layer => {
+
+
+            if (
+                enabled &&
+                !map.hasLayer(layer)
+            ) {
+
+                layer.addTo(map);
+
             }
-        );
-
-}
 
 
-/* =========================================================
-   CLAMP
-========================================================= */
+            if (
+                !enabled &&
+                map.hasLayer(layer)
+            ) {
 
-function clamp(
-    value,
-    min,
-    max
-) {
+                map.removeLayer(layer);
 
-    return Math.max(
-        min,
-        Math.min(
-            max,
-            value
-        )
+            }
+
+        }
+
     );
 
 }
 
 
-/* =========================================================
-   CAPITALIZE
-========================================================= */
-
-function capitalize(
-    value
-) {
-
-    if (!value) {
-        return "";
-    }
-
-
-    return (
-        value.charAt(0).toUpperCase() +
-        value.slice(1)
-    );
-
-}
-
 
 /* =========================================================
-   REFRESH ICONS
+   BUTTON EVENTS
 ========================================================= */
 
-function refreshIcons() {
+$("start")
+    .onclick =
+    startVoyage;
 
-    if (
-        typeof lucide !== "undefined" &&
-        typeof lucide.createIcons === "function"
-    ) {
 
-        lucide.createIcons();
+$("pause")
+    .onclick =
+    pauseVoyage;
 
-    }
 
-}
+$("reset")
+    .onclick =
+    resetVoyage;
+
+
+$("testHazard")
+    .onclick =
+    triggerHazard;
+
+
+$("approve")
+    .onclick =
+    approveReroute;
+
+
+$("reject")
+    .onclick =
+    rejectReroute;
+
 
 
 /* =========================================================
-   EVENT LISTENERS
+   LAYER EVENTS
 ========================================================= */
 
-function initializeControls() {
+document
+    .querySelectorAll(
+        "[data-layer]"
+    )
+    .forEach(
 
+        checkbox => {
 
-    /*
-        Start
-    */
+            checkbox.onchange =
 
-    if (DOM.startButton) {
+                event => {
 
-        DOM.startButton.addEventListener(
-            "click",
-            startVoyage
-        );
+                    toggleLayer(
 
-    }
+                        event.target
+                            .dataset
+                            .layer,
 
+                        event.target.checked
 
-    /*
-        Pause
-    */
-
-    if (DOM.pauseButton) {
-
-        DOM.pauseButton.addEventListener(
-            "click",
-            pauseVoyage
-        );
-
-    }
-
-
-    /*
-        Reset
-    */
-
-    if (DOM.resetButton) {
-
-        DOM.resetButton.addEventListener(
-            "click",
-            resetVoyage
-        );
-
-    }
-
-
-    /*
-        Center vessel
-    */
-
-    if (DOM.centerButton) {
-
-        DOM.centerButton.addEventListener(
-            "click",
-            centerVessel
-        );
-
-    }
-
-
-    /*
-        Generate routes
-    */
-
-    if (
-        DOM.generateRouteButton
-    ) {
-
-        DOM.generateRouteButton.addEventListener(
-            "click",
-            generateRoutes
-        );
-
-    }
-
-
-    /*
-        Route options
-    */
-
-    document.querySelectorAll(
-        ".route-option"
-    ).forEach(
-        option => {
-
-            option.addEventListener(
-                "click",
-                () => {
-
-                    selectRoute(
-                        option.dataset.route,
-                        true
                     );
 
-                }
-            );
+                };
 
+        }
+
+    );
+
+
+document
+    .querySelectorAll(
+        "[data-route-option]"
+    )
+    .forEach(
+        option => {
+            option.onclick = () => {
+                selectRoute(option.dataset.routeOption);
+            };
         }
     );
 
-
-    /*
-        Layer controls
-    */
-
-    initializeLayerControls();
-
-}
-
-
-/* =========================================================
-   KEYBOARD SHORTCUTS
-========================================================= */
-
-function initializeKeyboardControls() {
-
-    document.addEventListener(
-        "keydown",
-        event => {
-
-            if (
-                event.code ===
-                "Space"
-            ) {
-
-                event.preventDefault();
-
-
-                if (
-                    navigationState.isRunning
-                ) {
-
-                    pauseVoyage();
-
-                }
-
-                else {
-
-                    startVoyage();
-
-                }
-
-            }
-
-
-            if (
-                event.key.toLowerCase() ===
-                "r"
-            ) {
-
-                resetVoyage();
-
-            }
-
-
-            if (
-                event.key.toLowerCase() ===
-                "c"
-            ) {
-
-                centerVessel();
-
-            }
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   INITIAL STATE
-========================================================= */
-
-function initializeNavigation() {
-
-    initializeMap();
-
-    initializeControls();
-
-    initializeKeyboardControls();
-
-
-    /*
-        Initial route.
-    */
-
-    selectRoute(
-        "B",
-        false
-    );
-
-
-    /*
-        Initial telemetry.
-    */
-
-    const start =
-        getCurrentRoute()[0];
-
-
-    updateVesselTelemetry(
-        start
-    );
-
-
-    updateLastUpdated();
-
-
-    /*
-        Initial AI insight.
-    */
-
-    setAIInsight(
-
-        "Route B selected by AI",
-
-        "Route B provides a balanced route between distance, sea-ice exposure, iceberg risk and fuel consumption. The vessel is ready to begin the simulated voyage.",
-
-        "ROUTE DECISION",
-
-        "low",
-
-        "On Schedule",
-
-        "Normal"
-
-    );
-
-
-    /*
-        Update timestamp every 15 seconds.
-    */
-
-    setInterval(
-        updateLastUpdated,
-        15000
-    );
-
-
-    refreshIcons();
-
-}
 
 
 /* =========================================================
    START APPLICATION
 ========================================================= */
 
-document.addEventListener(
-    "DOMContentLoaded",
-    () => {
-
-        initializeNavigation();
-
-    }
-);
-
-
-/* =========================================================
-   END OF NAVIGATION JS
-========================================================= */
+init();

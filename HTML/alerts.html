@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dhruv Netra | Alerts</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../CSS/operations.css">
+    <link rel="stylesheet" href="../CSS/sidebar.css">
+</head>
+<body>
+<div class="app-container">
+    <aside class="sidebar">
+        <div class="brand"><div class="brand-icon">DN</div><div class="brand-text"><h2>Dhruv Netra</h2><span>Antarctic Decision Support</span></div></div>
+        <nav class="sidebar-nav">
+            <a href="dashboard.html" class="nav-item"><span class="nav-icon">⌂</span><span>Dashboard</span></a>
+            <a href="navigation.html" class="nav-item"><span class="nav-icon">⌖</span><span>Navigation</span></a>
+            <a href="environment.html" class="nav-item"><span class="nav-icon">◌</span><span>Environment</span></a>
+            <a href="alerts.html" class="nav-item active"><span class="nav-icon">⚠</span><span>Alerts</span><b class="nav-alert-count">3</b></a>
+            <a href="reports.html" class="nav-item"><span class="nav-icon">▤</span><span>Reports</span></a>
+        </nav>
+        <div class="sidebar-bottom"><a href="settings.html" class="nav-item"><span class="nav-icon">⚙</span><span>Settings</span></a><div class="system-status"><span class="status-dot"></span><div><strong>System Online</strong><small>All services operational</small></div></div></div>
+    </aside>
+    <main class="main-content">
+        <header class="top-header"><div><p class="page-label">SAFETY OPERATIONS</p><h1>Alerts</h1><p class="page-description">Review environmental warnings, iceberg predictions and decisions that need a captain's attention.</p></div><div class="header-right"><div class="connection-status"><span class="status-dot"></span> Live monitoring</div><div class="user-profile"><div class="profile-avatar">DN</div><div class="profile-info"><strong>DN-01</strong><span>Indian Research Vessel</span></div></div></div></header>
+        <section class="page-grid">
+            <div class="panel panel-wide"><div class="panel-header"><div><p class="eyebrow">INBOX</p><h2>Alert queue</h2><p>Prioritized by operational impact and time to closest approach.</p></div><span class="badge warning">3 OPEN</span></div><div class="alert-actions"><button class="small-button active" data-alert-filter="all">All</button><button class="small-button" data-alert-filter="open">Open</button><button class="small-button" data-alert-filter="resolved">Resolved</button></div><div class="alert-list">
+                <article class="alert-item critical" data-status="open"><span class="alert-severity"></span><div><h3>Predicted iceberg conflict · IB-042</h3><p>Trajectory may cross Route B safety corridor. Captain approval is required before rerouting.</p><div class="alert-actions"><button class="primary-button" data-action="Opening navigation for iceberg reroute review">Review in Navigation</button></div></div><time>42 min to CPA</time></article>
+                <article class="alert-item" data-status="open"><span class="alert-severity"></span><div><h3>Sea-ice concentration increasing</h3><p>Ice concentration is forecast to rise to 58% along the selected corridor within 6–12 hours.</p></div><time>6–12 hr</time></article>
+                <article class="alert-item resolved" data-status="resolved"><span class="alert-severity"></span><div><h3>Communication link restored</h3><p>Vessel telemetry and environmental data feeds are reporting normally.</p></div><time>Resolved 18 min ago</time></article>
+            </div></div>
+            <aside class="panel"><div class="panel-header"><div><p class="eyebrow">CURRENT POSTURE</p><h2>Risk summary</h2></div></div><div class="metric-grid"><div class="metric"><span>OPEN ALERTS</span><strong>2</strong><em class="warning-text">Needs review</em></div><div class="metric"><span>HIGHEST RISK</span><strong>High</strong><em class="warning-text">Iceberg track</em></div><div class="metric"><span>ROUTE</span><strong>B</strong><em>Balanced</em></div><div class="metric"><span>DATA LINK</span><strong>Online</strong><em>All feeds active</em></div></div></aside>
+        </section>
+        <footer class="footer"><span>Dhruv Netra Decision Support System</span><span>Last checked <strong id="operationsUpdated">--:--</strong></span></footer>
+    </main>
+</div><div class="toast" id="toast"></div><script src="../JAVASCRIPT/operations.js"></script>
+</body>
+</html>

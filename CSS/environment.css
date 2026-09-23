@@ -1576,6 +1576,211 @@ a {
 
 
 /* =========================================================
+   CURRENT WATCH
+   ========================================================= */
+
+.current-watch-section {
+    margin-bottom: 15px;
+    padding: 20px;
+    background:
+        radial-gradient(circle at 88% 12%, rgba(77, 184, 255, 0.10), transparent 32%),
+        linear-gradient(135deg, #102539, #0c1b2b);
+    border: 1px solid rgba(93, 220, 240, 0.16);
+    border-radius: var(--radius-md);
+}
+
+.current-watch-heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 18px;
+    margin-bottom: 17px;
+}
+
+.current-watch-heading h2 {
+    margin-top: 5px;
+    font-size: 16px;
+    letter-spacing: -0.3px;
+}
+
+.current-watch-heading p:not(.panel-label) {
+    max-width: 560px;
+    margin-top: 7px;
+    color: var(--text-secondary);
+    font-size: 9px;
+    line-height: 1.55;
+}
+
+.flow-legend {
+    display: flex;
+    gap: 12px;
+    padding-top: 4px;
+    color: var(--text-secondary);
+    font-size: 8px;
+    white-space: nowrap;
+}
+
+.flow-legend span {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.legend-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+}
+
+.air-dot { background: var(--weather); }
+.water-dot { background: var(--ice); }
+
+.flow-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+}
+
+.flow-card {
+    padding: 14px;
+    border: 1px solid var(--border-light);
+    border-radius: 10px;
+    background: rgba(4, 15, 27, 0.35);
+}
+
+.air-flow-card { border-color: rgba(77, 184, 255, 0.22); }
+.water-flow-card { border-color: rgba(103, 223, 245, 0.20); }
+
+.flow-card-topline,
+.meter-label,
+.flow-explanation {
+    display: flex;
+    align-items: center;
+}
+
+.flow-card-topline { gap: 8px; }
+
+.flow-icon {
+    width: 27px;
+    height: 27px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 7px;
+    color: var(--weather);
+    background: var(--weather-soft);
+}
+
+.water-flow-card .flow-icon {
+    color: var(--ice);
+    background: var(--ice-soft);
+}
+
+.flow-icon svg { width: 14px; height: 14px; }
+
+.flow-type {
+    color: var(--text-secondary);
+    font-size: 7px;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.flow-state {
+    margin-left: auto;
+    color: var(--green);
+    font-size: 6px;
+    font-weight: 700;
+    letter-spacing: 0.6px;
+}
+
+.flow-reading {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 17px 0 14px;
+}
+
+.flow-compass {
+    width: 54px;
+    height: 54px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    border: 1px solid rgba(77, 184, 255, 0.25);
+    border-radius: 50%;
+    color: var(--weather);
+    background: rgba(77, 184, 255, 0.07);
+}
+
+.water-compass {
+    border-color: rgba(103, 223, 245, 0.24);
+    color: var(--ice);
+    background: rgba(103, 223, 245, 0.07);
+}
+
+.flow-compass svg { width: 18px; height: 18px; }
+.flow-compass span { font-size: 7px; font-weight: 700; letter-spacing: 0.7px; }
+
+.flow-reading strong {
+    display: block;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.flow-reading span:not(.flow-compass span) {
+    display: block;
+    max-width: 240px;
+    margin-top: 4px;
+    color: var(--text-muted);
+    font-size: 8px;
+    line-height: 1.4;
+}
+
+.meter-label {
+    justify-content: space-between;
+    color: var(--text-muted);
+    font-size: 7px;
+}
+
+.meter-label strong { color: var(--text-secondary); font-weight: 500; }
+
+.meter-track {
+    height: 4px;
+    margin-top: 7px;
+    overflow: hidden;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.meter-track span {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: var(--weather);
+}
+
+.water-flow-card .meter-track span { background: var(--ice); }
+
+.flow-explanation {
+    gap: 6px;
+    margin-top: 12px;
+    color: var(--text-secondary);
+    font-size: 7.5px;
+    line-height: 1.45;
+}
+
+.flow-explanation svg {
+    width: 12px;
+    height: 12px;
+    flex-shrink: 0;
+    color: var(--text-muted);
+}
+
+
+/* =========================================================
    AI WARNING STATE
    ========================================================= */
 
@@ -1745,6 +1950,10 @@ a {
     .forecast-point {
         min-width: 80px;
     }
+
+    .flow-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 
@@ -1795,6 +2004,14 @@ a {
     }
 
     .route-impact-content {
+        grid-template-columns: 1fr;
+    }
+
+    .current-watch-heading {
+        flex-direction: column;
+    }
+
+    .flow-grid {
         grid-template-columns: 1fr;
     }
 

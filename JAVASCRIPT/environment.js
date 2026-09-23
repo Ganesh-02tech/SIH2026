@@ -152,6 +152,12 @@ const elements = {
     oceanAIText:
         document.querySelector(".ocean-ai p"),
 
+    airCurrentSpeed:
+        document.getElementById("airCurrentSpeed"),
+
+    waterCurrentSpeed:
+        document.getElementById("waterCurrentSpeed"),
+
 
     /* -------------------------
        Forecast
@@ -543,6 +549,16 @@ function updateOcean() {
         environmentState.seaState
 
     ];
+
+    if (elements.airCurrentSpeed) {
+        elements.airCurrentSpeed.textContent =
+            `${Math.round(environmentState.windSpeed)} kn`;
+    }
+
+    if (elements.waterCurrentSpeed) {
+        elements.waterCurrentSpeed.textContent =
+            `${environmentState.currentSpeed.toFixed(1)} kn`;
+    }
 
 
     elements.oceanCards.forEach(

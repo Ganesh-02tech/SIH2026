@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dhruv Netra | Reports</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../CSS/operations.css">
+    <link rel="stylesheet" href="../CSS/sidebar.css">
+</head>
+<body>
+<div class="app-container">
+    <aside class="sidebar"><div class="brand"><div class="brand-icon">DN</div><div class="brand-text"><h2>Dhruv Netra</h2><span>Antarctic Decision Support</span></div></div><nav class="sidebar-nav"><a href="dashboard.html" class="nav-item"><span class="nav-icon">⌂</span><span>Dashboard</span></a><a href="navigation.html" class="nav-item"><span class="nav-icon">⌖</span><span>Navigation</span></a><a href="environment.html" class="nav-item"><span class="nav-icon">◌</span><span>Environment</span></a><a href="alerts.html" class="nav-item"><span class="nav-icon">⚠</span><span>Alerts</span><b class="nav-alert-count">3</b></a><a href="reports.html" class="nav-item active"><span class="nav-icon">▤</span><span>Reports</span></a></nav><div class="sidebar-bottom"><a href="settings.html" class="nav-item"><span class="nav-icon">⚙</span><span>Settings</span></a><div class="system-status"><span class="status-dot"></span><div><strong>System Online</strong><small>All services operational</small></div></div></div></aside>
+    <main class="main-content"><header class="top-header"><div><p class="page-label">MISSION RECORDS</p><h1>Reports</h1><p class="page-description">Create a clear operational record from voyage progress, route decisions and environmental conditions.</p></div><div class="header-right"><div class="connection-status"><span class="status-dot"></span> Data synchronized</div><div class="user-profile"><div class="profile-avatar">DN</div><div class="profile-info"><strong>DN-01</strong><span>Indian Research Vessel</span></div></div></div></header>
+        <section class="page-grid"><div class="panel panel-wide"><div class="panel-header"><div><p class="eyebrow">REPORT LIBRARY</p><h2>Mission documents</h2><p>Generated from the current simulated voyage record.</p></div><button class="primary-button" data-action="Preparing a new voyage report">+ New report</button></div><div class="report-list"><div class="report-row"><div><strong>Voyage summary · Route B</strong><span>Progress, ETA, fuel and vessel telemetry · Updated today</span></div><button class="small-button" data-action="Opening voyage summary preview">Open preview</button></div><div class="report-row"><div><strong>Environmental conditions · Southern Ocean</strong><span>Air, water current, sea ice and iceberg forecast · Updated today</span></div><button class="small-button" data-action="Opening environmental report preview">Open preview</button></div><div class="report-row"><div><strong>Route decision log · IB-042</strong><span>Alert timeline, captain decisions and alternate route evaluation</span></div><button class="small-button" data-action="Opening route decision log preview">Open preview</button></div></div></div><div class="panel"><div class="panel-header"><div><p class="eyebrow">THIS VOYAGE</p><h2>At a glance</h2></div></div><div class="metric-grid"><div class="metric"><span>PROGRESS</span><strong>64%</strong><em>On schedule</em></div><div class="metric"><span>ROUTE RISK</span><strong>Moderate</strong><em class="warning-text">Ice increasing</em></div><div class="metric"><span>EST. ARRIVAL</span><strong>5d 14h</strong><em>Route B</em></div><div class="metric"><span>FUEL IMPACT</span><strong>+4%</strong><em class="warning-text">Environment</em></div></div></div></section><footer class="footer"><span>Reports use simulated mission values</span><span>Last synchronized <strong id="operationsUpdated">--:--</strong></span></footer></main>
+</div><div class="toast" id="toast"></div><script src="../JAVASCRIPT/operations.js"></script>
+</body>
+</html>

@@ -21,6 +21,7 @@
 
     <!-- Environment CSS -->
     <link rel="stylesheet" href="../CSS/environment.css">
+    <link rel="stylesheet" href="../CSS/sidebar.css">
 </head>
 
 
@@ -46,7 +47,7 @@
                 <h2>Dhruv Netra</h2>
 
                 <span>
-                    Indian Antarctic Navigation Support
+                    Antarctic Decision Support
                 </span>
             </div>
 
@@ -65,7 +66,7 @@
             </a>
 
 
-            <a href="#" class="nav-item">
+            <a href="navigation.html" class="nav-item">
 
                 <i data-lucide="compass"></i>
 
@@ -83,7 +84,7 @@
             </a>
 
 
-            <a href="#" class="nav-item">
+            <a href="alerts.html" class="nav-item">
 
                 <i data-lucide="triangle-alert"></i>
 
@@ -94,7 +95,7 @@
             </a>
 
 
-            <a href="#" class="nav-item">
+            <a href="reports.html" class="nav-item">
 
                 <i data-lucide="file-text"></i>
 
@@ -108,7 +109,7 @@
         <!-- Sidebar Bottom -->
         <div class="sidebar-bottom">
 
-            <a href="#" class="nav-item">
+            <a href="settings.html" class="nav-item">
 
                 <i data-lucide="settings"></i>
 
@@ -125,7 +126,7 @@
 
                     <strong>System Online</strong>
 
-                    <small>Dhruv Netra v1.0</small>
+                    <small>All services operational</small>
 
                 </div>
 
@@ -161,7 +162,7 @@
                 </h1>
 
                 <p class="page-description">
-                    Current and predicted environmental conditions along the selected voyage route.
+                    Read the forces moving around the vessel and understand how they shape the route ahead.
                 </p>
 
             </div>
@@ -286,6 +287,101 @@
                     </p>
 
                 </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             CURRENT WATCH
+        ================================================== -->
+
+        <section class="current-watch-section">
+
+            <div class="current-watch-heading">
+
+                <div>
+
+                    <p class="panel-label">
+                        FLOW INTELLIGENCE
+                    </p>
+
+                    <h2>
+                        Current watch
+                    </h2>
+
+                    <p>
+                        Air moves above the vessel. Water moves beneath it. Together they influence speed, heading and fuel use.
+                    </p>
+
+                </div>
+
+                <div class="flow-legend">
+                    <span><i class="legend-dot air-dot"></i> Air</span>
+                    <span><i class="legend-dot water-dot"></i> Water</span>
+                </div>
+
+            </div>
+
+            <div class="flow-grid">
+
+                <article class="flow-card air-flow-card">
+
+                    <div class="flow-card-topline">
+                        <div class="flow-icon"><i data-lucide="wind"></i></div>
+                        <span class="flow-type">AIR CURRENT</span>
+                        <span class="flow-state">ACTIVE</span>
+                    </div>
+
+                    <div class="flow-reading">
+                        <div class="flow-compass air-compass">
+                            <i data-lucide="arrow-up-right"></i>
+                            <span>NE</span>
+                        </div>
+                        <div>
+                            <strong id="airCurrentSpeed">32 kn</strong>
+                            <span>moving toward the vessel from the northeast</span>
+                        </div>
+                    </div>
+
+                    <div class="flow-meter">
+                        <div class="meter-label"><span>Force on route</span><strong>Moderate</strong></div>
+                        <div class="meter-track"><span style="width: 64%"></span></div>
+                    </div>
+
+                    <p class="flow-explanation"><i data-lucide="info"></i> Headwind can reduce vessel speed and increase fuel demand.</p>
+
+                </article>
+
+                <article class="flow-card water-flow-card">
+
+                    <div class="flow-card-topline">
+                        <div class="flow-icon"><i data-lucide="waves"></i></div>
+                        <span class="flow-type">WATER CURRENT</span>
+                        <span class="flow-state">ACTIVE</span>
+                    </div>
+
+                    <div class="flow-reading">
+                        <div class="flow-compass water-compass">
+                            <i data-lucide="arrow-down-left"></i>
+                            <span>SW</span>
+                        </div>
+                        <div>
+                            <strong id="waterCurrentSpeed">1.6 kn</strong>
+                            <span>surface current moving toward the southwest</span>
+                        </div>
+                    </div>
+
+                    <div class="flow-meter">
+                        <div class="meter-label"><span>Influence on route</span><strong>Manageable</strong></div>
+                        <div class="meter-track"><span style="width: 38%"></span></div>
+                    </div>
+
+                    <p class="flow-explanation"><i data-lucide="info"></i> A following current can help the vessel maintain speed with less power.</p>
+
+                </article>
 
             </div>
 

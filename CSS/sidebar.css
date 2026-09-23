@@ -1,0 +1,211 @@
+/* Shared sidebar used by every Dhruv Netra page. */
+:root {
+    --shared-sidebar-width: 245px;
+    --shared-sidebar-bg: #091827;
+    --shared-sidebar-line: rgba(148, 177, 205, 0.12);
+    --shared-sidebar-text: #9fb0c1;
+    --shared-sidebar-muted: #6f8193;
+    --shared-sidebar-active: #5bb4ff;
+    --shared-sidebar-green: #35d39a;
+}
+
+.sidebar {
+    width: var(--shared-sidebar-width);
+    flex: 0 0 var(--shared-sidebar-width);
+    padding: 24px 15px;
+    background: var(--shared-sidebar-bg);
+    border-right: 1px solid var(--shared-sidebar-line);
+    color: #f2f7fb;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 4px 9px 28px;
+}
+
+.brand-icon {
+    width: 38px;
+    height: 38px;
+    flex: none;
+    display: grid;
+    place-items: center;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #1977c9, #45b7ff);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .5px;
+    box-shadow: 0 8px 22px rgba(31, 145, 235, .18);
+}
+
+.brand-text h2 {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0;
+}
+
+.brand-text span {
+    display: block;
+    max-width: 145px;
+    margin-top: 3px;
+    color: var(--shared-sidebar-muted);
+    font-size: 8.5px;
+    line-height: 1.3;
+}
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.nav-item,
+.sidebar nav a {
+    min-height: 42px;
+    padding: 0 12px;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--shared-sidebar-text);
+    font-size: 12px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background .2s ease, color .2s ease;
+}
+
+.nav-item:hover,
+.sidebar nav a:hover {
+    background: rgba(255, 255, 255, .04);
+    color: #f2f7fb;
+}
+
+.nav-item.active,
+.sidebar nav a.active {
+    background: rgba(59, 158, 241, .13);
+    color: var(--shared-sidebar-active);
+    box-shadow: inset 3px 0 var(--shared-sidebar-active);
+}
+
+.nav-icon,
+.sidebar nav a > :first-child {
+    width: 18px;
+    flex: 0 0 18px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 15px;
+}
+
+.sidebar nav span {
+    margin-left: 0;
+}
+
+.sidebar nav .nav-icon {
+    display: inline-flex;
+}
+
+.nav-item svg,
+.sidebar nav a svg {
+    width: 16px;
+    height: 16px;
+    stroke-width: 1.8;
+}
+
+.nav-alert-count {
+    min-width: 17px;
+    height: 17px;
+    margin-left: auto;
+    padding: 0 5px;
+    border-radius: 20px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 101, 117, .12);
+    color: #ff6575;
+    font-size: 7px;
+    font-weight: 700;
+}
+
+.sidebar-bottom {
+    margin-top: auto;
+}
+
+.system-status,
+.system {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin-top: 18px;
+    padding: 12px;
+    border: 1px solid var(--shared-sidebar-line);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, .018);
+    color: var(--shared-sidebar-text);
+    font-size: 10px;
+}
+
+.system-status strong,
+.system-status small,
+.system small {
+    display: block;
+}
+
+.system-status small,
+.system small {
+    margin-top: 3px;
+    color: var(--shared-sidebar-muted);
+    font-size: 8px;
+}
+
+.status-dot,
+.system i {
+    width: 7px;
+    height: 7px;
+    flex: none;
+    border-radius: 50%;
+    background: var(--shared-sidebar-green);
+    box-shadow: 0 0 0 4px rgba(53, 211, 154, .08);
+}
+
+@media (max-width: 700px) {
+    .sidebar {
+        width: 72px;
+        flex-basis: 72px;
+        padding: 20px 10px;
+    }
+
+    .brand {
+        justify-content: center;
+        padding: 4px 0 25px;
+    }
+
+    .brand-text,
+    .nav-item span:not(.nav-icon),
+    .sidebar nav span:not(.nav-icon),
+    .system-status div,
+    .system div,
+    .system small {
+        display: none;
+    }
+
+    .nav-item,
+    .sidebar nav a {
+        justify-content: center;
+        padding: 0;
+    }
+
+    .nav-alert-count {
+        display: none;
+    }
+}
+
+@media (max-width: 900px) {
+    .navigation-page-placeholder {
+        display: none;
+    }
+}

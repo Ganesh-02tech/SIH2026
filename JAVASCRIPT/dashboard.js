@@ -644,7 +644,11 @@ function initializeNavigation() {
 
         item.addEventListener("click", event => {
 
-            event.preventDefault();
+            const href = item.getAttribute("href");
+
+            if (!href || href === "#") {
+                event.preventDefault();
+            }
 
 
             /*
